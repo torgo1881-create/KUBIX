@@ -1,0 +1,1896 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Генератор фотомозаики</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #eeeff2;
+        --card: #fff;
+        --ink: #101318;
+        --muted: #6e7480;
+        --line: #d8dae1;
+        --signal: #1b44e0;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding-inline: 16px;
+        padding-block: 32px 64px;
+        background: var(--bg);
+        color: var(--ink);
+        font: 15px/1.5 "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+        background-image:
+          linear-gradient(to right, rgba(16, 19, 24, 0.045) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(16, 19, 24, 0.045) 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+      /* minmax(0,1fr) не даёт широкой таблице растянуть всю страницу. */
+      main { margin: 0 auto; max-width: 900px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+      .card, section, .build > div { min-width: 0; }
+      .card, .drop { grid-template-columns: minmax(0, 1fr); }
+      h1 { margin: 0; font-size: 24px; letter-spacing: -0.01em; }
+      p.lede { margin: 0; color: var(--muted); }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 12px; }
+      .drop { border: 1px dashed var(--line); border-radius: 6px; padding: 48px 16px; text-align: center; background: rgba(255,255,255,0.6); display: grid; gap: 12px; justify-items: center; }
+      .drop.over { border-color: var(--signal); background: rgba(27, 68, 224, 0.05); }
+      button { font: inherit; padding: 7px 14px; border-radius: 4px; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+      button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+      .strip figure, .products button { -webkit-tap-highlight-color: transparent; }
+      button.primary { background: var(--signal); border-color: var(--signal); color: #fff; }
+      button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+      button:disabled { opacity: 0.5; cursor: default; }
+      .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      .stage { position: relative; height: 380px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+      .stage canvas { display: block; touch-action: none; cursor: grab; }
+      .eyebrow { font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+      ol#stages { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(110,116,128,0.5); }
+      ol#stages li[data-state="active"] { color: var(--ink); }
+      ol#stages li[data-state="done"] { color: var(--muted); }
+      #progress { height: 4px; border-radius: 999px; background: #e2e4ea; overflow: hidden; }
+      #progress span { display: block; height: 100%; width: 0; background: var(--signal); transition: width 0.2s; }
+      /* Результат должен помещаться на экран целиком, как у готовых наборов:
+         высота ограничена, ширина следует за пропорцией сетки, блок по центру. */
+      .compare-box { --fit-height: min(68vh, 640px); position: relative; overflow: hidden; border: 1px solid var(--line);
+        border-radius: 4px; margin: 0 auto; max-width: 100%; background: var(--card); }
+      .compare-box .layer { position: absolute; inset: 0; transform-origin: 0 0; }
+      .compare-box canvas { width: 100%; height: 100%; display: block; }
+      .compare-box .mosaic canvas { image-rendering: pixelated; }
+      .compare-box .clip { position: absolute; inset: 0; }
+      .compare-box .divider { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(16,19,24,0.7); }
+      .tag { position: absolute; top: 8px; font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(255,255,255,0.9); padding: 4px 6px; border-radius: 3px; }
+      dl.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin: 0; }
+      dt { font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+      dd { margin: 4px 0 0; font: 400 14px/1.2 "IBM Plex Mono", ui-monospace, monospace; }
+      .error { border: 1px solid rgba(200,40,40,0.4); background: rgba(200,40,40,0.06); color: #a11; padding: 8px 12px; border-radius: 4px; }
+      .steps { list-style: none; display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0;
+        font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(110,116,128,0.55); }
+      .steps li[data-state="active"] { color: var(--ink); }
+      .steps li[data-state="done"] { color: var(--muted); }
+      .step-title { margin: 6px 0 0; font-size: 20px; letter-spacing: -0.01em; }
+      .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+      .products button { display: grid; gap: 6px; text-align: left; padding: 14px; border-radius: 6px; min-height: 0; }
+      .products button[aria-pressed="true"] { background: var(--card); color: var(--ink);
+        border-color: var(--signal); box-shadow: inset 0 0 0 1px var(--signal); }
+      .products .pname { font-size: 16px; font-weight: 600; }
+      .products dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font-size: 12px; }
+      .products dt { color: var(--muted); font: 500 11px/1.5 "IBM Plex Mono", ui-monospace, monospace; }
+      .products dd { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+      .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;
+        border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px; background: rgba(255,255,255,0.6); }
+      .summary div span { display: block; }
+      .summary .k { font: 500 10px/1.6 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+      .summary .v { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 14px; }
+      .advanced { border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px; }
+      .advanced summary { cursor: pointer; font: 500 11px/1.4 "IBM Plex Mono", ui-monospace, monospace;
+        letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+      .advanced .manual { display: grid; gap: 14px; margin-top: 14px; opacity: 0.45; pointer-events: none; }
+      .advanced[data-manual="true"] .manual { opacity: 1; pointer-events: auto; }
+      .capacity { border: 1px solid var(--line); border-left-width: 3px; border-radius: 5px; padding: 10px 12px; display: grid; gap: 4px; }
+      .capacity[data-level="ok"] { border-left-color: #2f7d32; }
+      .capacity[data-level="adjusted"] { border-left-color: var(--signal); }
+      .capacity[data-level="tight"] { border-left-color: #b8860b; }
+      .capacity[data-level="insufficient"] { border-left-color: #b3261e; }
+      .capacity b { font-size: 14px; }
+      .capacity span { font-size: 13px; color: var(--muted); }
+      .projects { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+      .projects li { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; }
+      .projects li[data-current="true"] { border-color: var(--signal); }
+      .projects img { width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--line); border-radius: 3px; image-rendering: pixelated; }
+      .projects .meta { flex: 1; min-width: 0; }
+      .projects .meta b { display: block; font-weight: 500; font-size: 14px; }
+      .projects .meta small { color: var(--muted); font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; }
+      .build { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 20px; margin-top: 8px; }
+      .block-grid { display: grid; gap: 2px; background: var(--line); padding: 2px; border-radius: 4px; margin-top: 10px; }
+      .block-grid div { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font: 500 14px/1 "IBM Plex Mono", ui-monospace, monospace; }
+      #blockProgress { height: 4px; border-radius: 999px; background: #e2e4ea; overflow: hidden; margin-top: 8px; }
+      #blockProgress span { display: block; height: 100%; background: var(--signal); transition: width 0.15s; }
+      .overview { position: relative; margin-top: 6px; overflow: hidden; border-radius: 3px; }
+      .overview canvas { width: 100%; display: block; image-rendering: pixelated; border: 1px solid var(--line); border-radius: 3px; }
+      .overview div { position: absolute; border: 2px solid var(--signal); box-shadow: 0 0 0 9999px rgba(238,239,242,0.55); pointer-events: none; }
+      .legend-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; font-size: 12px; }
+      .legend-list li { display: flex; align-items: center; gap: 6px; }
+      .legend-list b { margin-left: auto; font-weight: 400; font-family: "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); }
+      .strip { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 10px; scroll-snap-type: x mandatory; }
+      .strip:has(figure:nth-child(-n + 6):last-child) { justify-content: center; }
+      .strip figure { margin: 0; flex: 0 0 auto; width: 108px; cursor: pointer; scroll-snap-align: start; }
+      .strip canvas { width: 108px; display: block; border: 2px solid transparent; border-radius: 5px;
+        image-rendering: pixelated; background: var(--card); }
+      .strip figure[aria-selected="true"] canvas { border-color: var(--signal); }
+      .strip figcaption { margin-top: 5px; font-size: 11px; line-height: 1.3; color: var(--muted); text-align: center; }
+      .strip figure[aria-selected="true"] figcaption { color: var(--ink); font-weight: 500; }
+      .variants { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+      .variants article { border: 1px solid var(--line); border-radius: 5px; padding: 10px; display: grid; gap: 8px; align-content: start; background: var(--card); }
+      .variants article[data-selected="true"] { border-color: var(--signal); box-shadow: inset 0 0 0 1px var(--signal); }
+      .variants canvas { width: 100%; display: block; border-radius: 3px; image-rendering: pixelated; }
+      .variants h3 { margin: 0; font-size: 14px; }
+      .variants dl { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; margin: 0; font-size: 11px; }
+      .variants dt { font-size: 10px; letter-spacing: 0.1em; }
+      .variants dd { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; }
+      .variants .breakdown { font: 10px/1.5 "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); }
+      .variants .best { font: 500 10px/1 "IBM Plex Mono", ui-monospace, monospace; color: var(--signal); text-transform: uppercase; letter-spacing: 0.1em; }
+      .ab { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+      .ab figure { margin: 0; }
+      .ab canvas { width: 100%; display: block; border: 1px solid var(--line); border-radius: 3px; image-rendering: pixelated; }
+      .ab figcaption { font: 500 11px/1.4 "IBM Plex Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
+      .ab small { display: block; font-family: "IBM Plex Sans", sans-serif; text-transform: none; letter-spacing: 0; color: var(--muted); }
+      .legend { display: flex; height: 24px; overflow: hidden; border: 1px solid var(--line); border-radius: 3px; margin-top: 8px; }
+      .legend span { display: block; }
+      .swatch { display: inline-block; width: 14px; height: 14px; border: 1px solid var(--line); border-radius: 2px; vertical-align: -2px; margin-right: 6px; }
+      table { border-collapse: collapse; width: 100%; font-size: 14px; }
+      th, td { border-bottom: 1px solid var(--line); padding: 7px 10px; text-align: left; }
+      th { font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+      td.num, th.num { text-align: right; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+      tfoot td { font-weight: 600; border-bottom: none; }
+      [hidden] { display: none !important; }
+      /* Готовый PNG показываем на странице: на телефоне картинку сохраняют
+         долгим нажатием, а не через загрузку файла. */
+      .overlay { position: fixed; inset: 0; z-index: 50; background: rgba(16, 19, 24, 0.72); display: grid; place-items: center; padding: 16px; }
+      .overlay-box { background: var(--card); border-radius: 6px; padding: 12px; width: 100%; max-width: 520px; max-height: 100%; overflow: auto; display: grid; gap: 10px; }
+      .overlay-box img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 3px; image-rendering: pixelated; }
+      .overlay-box a { color: var(--signal); }
+
+      /* --- мобильные экраны: одна колонка, крупные кнопки, прокручиваемые таблицы --- */
+      @media (max-width: 760px) {
+        body { padding-block: 16px 48px; }
+        h1 { font-size: 20px; }
+        main { gap: 14px; }
+        .card { padding: 12px; }
+        .stage { height: clamp(300px, 55vh, 460px); }
+        .compare-box { --fit-height: min(60vh, 560px); }
+        /* Сервисные карточки на телефоне уходят вниз: сначала кадр и результат. */
+        #advancedCard, #projectsCard { order: 10; }
+        .build { grid-template-columns: minmax(0, 1fr); }
+        .variants, .ab { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        dl.stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        button { padding: 9px 14px; min-height: 40px; }
+        #paletteReport, #buildMode { overflow-x: auto; }
+        table { min-width: 460px; }
+        .projects li { flex-wrap: wrap; }
+        .projects .meta { flex-basis: 100%; order: -1; }
+      }
+
+      @media (max-width: 430px) {
+        .variants, .ab { grid-template-columns: minmax(0, 1fr); }
+        .block-grid div { font-size: 11px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Фотомозаика · тестовая версия алгоритма</p>
+        <h1>Фото → мозаика из деталей</h1>
+        <p class="lede">
+          Выберите набор, загрузите фотографию и сравните варианты обработки.
+          Всё считается прямо в браузере: фото никуда не отправляется.
+        </p>
+      </header>
+
+      <div id="error" class="error" role="alert" hidden></div>
+
+      <div id="pngOverlay" class="overlay" hidden>
+        <div class="overlay-box" role="dialog" aria-label="Готовый PNG">
+          <div class="row" style="justify-content: space-between">
+            <span class="eyebrow">PNG готов</span>
+            <button id="pngClose" type="button">Закрыть</button>
+          </div>
+          <img id="pngImage" alt="Мозаика в полном размере" />
+          <p class="lede" style="font-size: 13px; margin: 0">
+            Удерживайте картинку, чтобы сохранить её в галерею телефона.
+          </p>
+          <div class="row">
+            <button id="pngSave" type="button" class="primary">Сохранить файлом</button>
+          </div>
+        </div>
+      </div>
+
+      <ol id="steps" class="steps">
+        <li data-step="product">1. Набор</li>
+        <li data-step="photo">2. Фото</li>
+        <li data-step="crop">3. Кадрирование</li>
+        <li data-step="generate">4. Генерация</li>
+        <li data-step="result">5. Результат</li>
+      </ol>
+
+      <section id="productStep" class="card">
+        <div>
+          <span class="eyebrow">Шаг 1</span>
+          <h2 class="step-title">Выберите набор</h2>
+        </div>
+        <div id="productCards" class="products"></div>
+      </section>
+
+      <section id="photoStep" class="card" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span>
+            <span class="eyebrow">Шаг 2</span>
+            <h2 class="step-title">Загрузите фотографию</h2>
+            <p id="chosenProduct" class="lede" style="margin: 4px 0 0; font-size: 13px"></p>
+          </span>
+          <button id="changeProduct" type="button">Другой набор</button>
+        </div>
+      </section>
+
+      <section id="advancedCard" class="card" hidden>
+        <details id="advanced" class="advanced">
+          <summary>Advanced · для тестирования алгоритма</summary>
+
+          <p class="lede" style="font-size: 12px; margin: 8px 0 12px">
+            Обычному пользователю этот раздел не нужен: набор задаёт все параметры сам.
+            Здесь настройки можно переопределить вручную, чтобы сравнивать поведение алгоритма.
+          </p>
+
+          <div class="row">
+            <button id="manualToggle" type="button" aria-pressed="false">Ручные настройки выключены</button>
+          </div>
+
+          <!-- Обратная связь не зависит от ручных настроек: экспорт нужен всегда. -->
+          <div>
+            <span class="eyebrow">Обратная связь</span>
+            <div class="row" style="margin-top: 8px">
+              <button id="exportChoices" type="button">Экспорт выборов вариантов</button>
+            </div>
+            <p class="lede" style="font-size: 12px; margin: 6px 0 0">
+              Какие варианты вы выбирали в ленте: без фотографий, только id варианта, набор и найдено ли лицо.
+              Файл читает <code>npm run choices</code>.
+            </p>
+          </div>
+
+          <div id="manualControls" class="manual">
+            <div>
+              <span class="eyebrow">Режим</span>
+              <div class="row" id="modes" style="margin-top: 8px"></div>
+              <p id="modeDescription" class="lede" style="margin: 6px 0 0; font-size: 12px"></p>
+            </div>
+
+            <div>
+              <span class="eyebrow">Размер мозаики</span>
+              <div class="row" id="sizes" style="margin-top: 8px"></div>
+            </div>
+
+            <div>
+              <span class="eyebrow">Палитра деталей (включая тестовые)</span>
+              <div class="row" id="palettes" style="margin-top: 8px"></div>
+            </div>
+
+            <div id="metricRow">
+              <span class="eyebrow">Метрика близости</span>
+              <div class="row" id="metrics" style="margin-top: 8px">
+                <span id="metricButtons" class="row"></span>
+                <button id="limits" type="button" aria-pressed="true" data-limits>Учитывать запас деталей</button>
+              </div>
+            </div>
+
+            <div>
+              <span class="eyebrow">Состояние запаса деталей (debug)</span>
+              <p id="capacityDebug" class="lede" style="font-size: 12px; margin: 6px 0 0">—</p>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="dropzone" class="drop" hidden>
+        <p><strong>Перетащите фотографию сюда</strong><br /><span class="lede">JPG, PNG, WEBP</span></p>
+        <button id="pick" class="primary" type="button">Выбрать файл</button>
+        <input id="file" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" hidden />
+      </section>
+
+      <section id="projectsCard" class="card" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span class="eyebrow">Проект</span>
+          <span class="eyebrow" id="projectsCount"></span>
+        </div>
+        <div class="row">
+          <input id="projectName" type="text" value="Новый проект" style="flex: 1; min-width: 160px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; font: inherit" />
+          <button id="saveProject" type="button">Сохранить</button>
+          <button id="shareProject" type="button">Поделиться</button>
+        </div>
+        <ul id="projectsList" class="projects"></ul>
+        <p id="notice" class="lede" style="font-size: 13px" hidden></p>
+      </section>
+
+      <section id="workspace" class="card" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span class="eyebrow" id="sourceInfo"></span>
+          <span class="row">
+            <button id="another" type="button">Другое фото</button>
+            <button id="reset" type="button">Сбросить</button>
+          </span>
+        </div>
+
+        <div id="cropStage" class="stage"><canvas id="crop"></canvas></div>
+
+        <div class="row" id="cropTools">
+          <span class="eyebrow">Масштаб</span>
+          <input id="zoom" type="range" min="1" max="8" step="0.01" value="1" style="flex: 1" />
+          <button id="fit" type="button">Вписать</button>
+          <button id="rotate" type="button" title="Повернуть фотографию на 90°">↻ Повернуть фото</button>
+          <button id="orientation" type="button" title="Собирать картину горизонтально или вертикально" hidden>▭ Горизонтально</button>
+        </div>
+
+        <div id="productSummary" class="summary"></div>
+
+
+        <div class="row">
+          <button id="generate" class="primary" type="button">Создать мозаику</button>
+          <button id="cancel" type="button" hidden>Отменить</button>
+          <button id="regenerate" type="button" hidden>Пересобрать</button>
+          <button id="brickView" type="button" aria-pressed="true" hidden>Вид: детали</button>
+          <button id="download" type="button" hidden>Скачать PNG</button>
+          <button id="back" type="button" hidden>Вернуться к кадру</button>
+        </div>
+
+        <ol id="stages"></ol>
+        <span id="stageHint" class="lede" style="font-size: 12px"></span>
+        <div id="progress"><span></span></div>
+
+        <div id="capacityStatus" class="capacity" hidden>
+          <b data-capacity-title></b>
+          <span data-capacity-detail></span>
+        </div>
+
+        <div id="result" hidden>
+          <div class="compare-box" id="compareBox">
+            <div class="layer" id="originalLayer"><canvas id="originalView"></canvas></div>
+            <div class="clip" id="clip">
+              <div class="layer mosaic" id="mosaicLayer"><canvas id="mosaicView"></canvas></div>
+            </div>
+            <div class="divider" id="divider"></div>
+            <span class="tag" style="left: 8px">Original</span>
+            <span class="tag" style="right: 8px">Mosaic</span>
+          </div>
+          <div style="margin-top: 12px">
+            <div class="row" style="justify-content: space-between">
+              <span class="eyebrow">Выберите вариант</span>
+              <span id="variantHint" class="lede" style="font-size: 12px"></span>
+            </div>
+            <div id="variantStrip" class="strip"></div>
+          </div>
+
+          <div class="row" style="margin-top: 8px">
+            <span class="eyebrow">Шторка</span>
+            <input id="split" type="range" min="0" max="100" step="0.5" value="50" style="flex: 1" />
+            <span class="eyebrow">Zoom</span>
+            <input id="viewZoom" type="range" min="1" max="8" step="0.1" value="1" style="flex: 1" />
+          </div>
+          <dl class="stats" id="stats" style="margin-top: 16px"></dl>
+
+          <div id="buildMode" style="margin-top: 20px">
+            <div class="row" style="justify-content: space-between">
+              <span class="eyebrow">Инструкция по сборке · build mode</span>
+              <span class="row">
+                <span class="row" id="blockSizes"></span>
+                <button id="downloadPdf" type="button">Скачать PDF</button>
+              </span>
+            </div>
+
+            <div class="build">
+              <div>
+                <div class="row" style="justify-content: space-between; margin-top: 10px">
+                  <span>
+                    <b id="stepLabel">Шаг 1 / 64</b>
+                    <small id="blockMeta" class="lede" style="display: block; font-size: 12px"></small>
+                  </span>
+                  <span class="row">
+                    <button id="prevBlock" type="button">Previous</button>
+                    <button id="nextBlock" type="button">Next</button>
+                  </span>
+                </div>
+                <div id="blockProgress"><span></span></div>
+                <div id="blockGrid" class="block-grid"></div>
+                <div style="margin-top: 10px">
+                  <span class="eyebrow">Деталей в блоке</span>
+                  <div id="blockCounts" class="row" style="margin-top: 6px; font-size: 12px"></div>
+                </div>
+              </div>
+
+              <div>
+                <span class="eyebrow">Где мы находимся</span>
+                <div id="overview" class="overview"><canvas></canvas><div id="highlight"></div></div>
+                <span class="eyebrow" style="display: block; margin-top: 12px">Легенда</span>
+                <ul id="blockLegend" class="legend-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="faceReport" hidden style="margin-top: 16px">
+            <span class="eyebrow">Лицо</span>
+            <p id="faceInfo" class="lede" style="margin: 6px 0 0; font-size: 13px"></p>
+          </div>
+
+          <div style="margin-top: 20px">
+            <div class="row" style="justify-content: space-between">
+              <span class="eyebrow">A/B: режимы рядом</span>
+              <button id="compare" type="button">Сравнить режимы</button>
+            </div>
+            <div id="abPreview" class="ab"></div>
+          </div>
+
+          <div id="paletteReport" hidden style="margin-top: 20px">
+            <span class="eyebrow">Использованные цвета</span>
+            <p id="limitSummary" class="lede" style="margin: 6px 0 0; font-size: 13px"></p>
+            <div id="legendBar" class="legend" role="img" aria-label="Доли цветов палитры"></div>
+            <div id="legendItems" class="row" style="margin-top: 8px"></div>
+            <table id="paletteStats" style="margin-top: 12px">
+              <thead>
+                <tr><th>Цвет</th><th>HEX</th><th class="num">Required</th><th class="num">Доля</th><th class="num">Available</th><th class="num">Status</th></tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot></tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      /* ==== ШРИФТ ДЛЯ PDF (base64, вклеен сборщиком) ==== */
+      /* @FONT@ */
+    </script>
+
+    <script type="module">
+      /* ==== ЯДРО: сгенерировано из src/ через npm run build:standalone ==== */
+      /* @CORE@ */
+      /* ==== КОНЕЦ ЯДРА ==== */
+
+      /* ==== ИСХОДНИК ВОРКЕРА (то же ядро, отдельный поток) ==== */
+      /* @WORKER@ */
+
+      // Blob-воркер работает и при открытии файла с диска, без сервера.
+      // URL один на сессию: воркер общий, а не по одному на задачу.
+      const WORKER_URL = URL.createObjectURL(new Blob([WORKER_SOURCE], { type: 'text/javascript' }));
+      setWorkerFactory(() => new Worker(WORKER_URL));
+
+      // Телефоны и планшеты: память под canvas там ограничена, одиннадцать
+      // вариантов по 2048 px её исчерпывают и превью гаснут. Считаем варианты
+      // на меньшем размере, а полноразмерный PNG дорисовываем из сетки.
+      const LIGHT_DEVICE =
+        (window.matchMedia && matchMedia('(pointer: coarse)').matches) ||
+        /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+        // iPadOS представляется как Mac, но с сенсорным экраном.
+        (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform)) ||
+        (typeof navigator.deviceMemory === 'number' && navigator.deviceMemory < 4);
+      const OUTPUT_SIZE = LIGHT_DEVICE ? 1024 : TARGET_OUTPUT_SIZE;
+      // Ядро всё равно читает кадр не крупнее MAX_SAMPLE_SIZE — на телефоне
+      // не держим лишнюю копию.
+      const CROP_EXPORT_SIZE = LIGHT_DEVICE ? MAX_SAMPLE_SIZE : 2048;
+
+      // Внутри встроенного просмотра страниц прямые загрузки закрыты: файл
+      // уходит через window.claude, просмотр сам спрашивает подтверждение.
+      // Без него (файл с диска, свой сервер) — обычная ссылка на скачивание.
+      const downloadsRuntime =
+        window.claude && typeof window.claude.use === 'function'
+          ? window.claude.use('downloads').catch(() => null)
+          : Promise.resolve(null);
+
+      async function saveFile(blob, filename) {
+        const runtime = await downloadsRuntime;
+        if (runtime) {
+          try {
+            await runtime.save({ filename, data: blob });
+            return true;
+          } catch (cause) {
+            if (cause && cause.code === 'declined') return false;
+            // остальные коды — пробуем обычную ссылку
+          }
+        }
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        return true;
+      }
+
+      const $ = (id) => document.getElementById(id);
+      const state = {
+        image: null,
+        sizeId: '64',
+        paletteId: DEFAULT_PALETTE_ID,
+        metric: 'ciede2000',
+        enforceLimits: true,
+        modeId: DEFAULT_MODE_ID,
+        variants: null,
+        selectedVariant: null,
+        keepVariants: false,
+        blockSize: DEFAULT_BLOCK_SIZE,
+        brickView: true,
+        plan: null,
+        step: 0,
+        controller: null,
+        cancelled: false,
+        projectId: null,
+        presetId: DEFAULT_PRESET_ID,
+        presetChosen: false,
+        manual: false,
+        capacity: null,
+        view: { zoom: 1, x: 0, y: 0 },
+        result: null,
+        cropped: null,
+        // Ориентация картины: набор задан вертикальным (64×96), но тот же
+        // набор собирается и горизонтально (96×64) — деталей столько же.
+        orientation: 'portrait',
+      };
+
+      /* --- этапы --- */
+      const STEPS = [
+        ['loading', 'Загрузка'],
+        ['processing', 'Обработка'],
+        ['generating', 'Генерация'],
+        ['done', 'Готово'],
+      ];
+      const ORDER = ['idle', 'loading', 'processing', 'generating', 'done'];
+      $('stages').innerHTML = STEPS.map(([s, l]) => `<li data-stage="${s}">${l}</li>`).join('');
+
+      function setStage(stage, value) {
+        const index = ORDER.indexOf(stage);
+        for (const li of $('stages').children) {
+          const at = ORDER.indexOf(li.dataset.stage);
+          li.dataset.state = li.dataset.stage === stage ? 'active' : index > at ? 'done' : '';
+        }
+        $('progress').firstElementChild.style.width = Math.round((value ?? 0) * 100) + '%';
+        document.body.dataset.stage = stage;
+      }
+      setStage('idle', 0);
+
+      function showError(message) {
+        $('error').textContent = message;
+        $('error').hidden = !message;
+      }
+
+      /* --- размеры --- */
+      $('sizes').innerHTML = MOSAIC_SIZES.map(
+        (s) => `<button type="button" data-size="${s.id}" aria-pressed="${s.id === state.sizeId}">${s.label}</button>`,
+      ).join('');
+      $('sizes').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-size]');
+        if (!button) return;
+        state.sizeId = button.dataset.size;
+        for (const b of $('sizes').children) b.setAttribute('aria-pressed', String(b === button));
+        fitCrop();
+      });
+
+      /* --- продуктовые наборы --- */
+
+      /** Активная конфигурация: либо набор, либо ручные настройки из Advanced. */
+      function activeConfig() {
+        const preset = getPreset(state.presetId);
+        const profile = getProcessingProfile(preset.processingProfile);
+
+        if (state.manual) {
+          const size = MOSAIC_SIZES.find((item) => item.id === state.sizeId) ?? MOSAIC_SIZES[0];
+          return {
+            preset,
+            source: 'manual',
+            cols: size.cols,
+            rows: size.rows,
+            palette: state.paletteId ? getPalette(state.paletteId) : undefined,
+            modeId: state.modeId,
+            metric: state.metric,
+            enforceLimits: state.enforceLimits,
+          };
+        }
+
+        const landscape = state.orientation === 'landscape' && preset.width !== preset.height;
+        return {
+          preset,
+          source: 'preset',
+          landscape,
+          cols: landscape ? preset.height : preset.width,
+          rows: landscape ? preset.width : preset.height,
+          palette: buildPresetPalette(preset),
+          modeId: profile.modeId,
+          metric: profile.distanceMetric,
+          enforceLimits: profile.enforcePieceLimits,
+        };
+      }
+
+      function renderProductCards() {
+        $('productCards').innerHTML = PRODUCT_PRESETS.map((preset) => {
+          const card = describePreset(preset, presetPaletteSize(preset));
+          const selected = state.presetChosen && preset.id === state.presetId;
+          return `<button type="button" data-preset="${preset.id}" aria-pressed="${selected}">
+            <span class="pname">${card.name}</span>
+            <dl>
+              <dt>Картина</dt><dd>${card.size}</dd>
+              <dt>Сетка</dt><dd>${card.grid}</dd>
+              <dt>Цветов</dt><dd>${card.colorsLabel}</dd>
+              <dt>Деталей</dt><dd>≈ ${formatNumber(card.pieces)}</dd>
+            </dl>
+          </button>`;
+        }).join('');
+      }
+
+      /** Подписи размера, сетки и кадра с учётом ориентации картины. */
+      function orientedLabels(config, card) {
+        const p = config.preset;
+        const swap = (text) => text.split('×').reverse().join('×');
+        if (config.source === 'manual') {
+          return { size: card.size, grid: `${config.cols}×${config.rows}`, aspect: card.aspect };
+        }
+        return config.landscape
+          ? { size: `${p.physicalHeight}×${p.physicalWidth} см`, grid: swap(card.grid), aspect: card.aspect.split(':').reverse().join(':') }
+          : { size: card.size, grid: card.grid, aspect: card.aspect };
+      }
+
+      function renderProductSummary() {
+        const config = activeConfig();
+        const card = describePreset(config.preset, presetPaletteSize(config.preset));
+        const labels = orientedLabels(config, card);
+        const rows = [
+          ['Набор', card.name],
+          ['Размер', labels.size],
+          ['Сетка', labels.grid],
+          ['Цветов', config.source === 'manual' ? String(config.palette?.colors.length ?? '—') : card.colorsLabel],
+          ['Кадр', labels.aspect],
+        ];
+        if (config.source === 'manual') rows.push(['Режим', 'ручные настройки']);
+
+        // Переворот есть только у прямоугольных наборов; в ручном режиме сетку задают сами.
+        const canFlip = config.source !== 'manual' && config.preset.width !== config.preset.height;
+        $('orientation').hidden = !canFlip;
+        $('orientation').textContent = config.landscape ? '▯ Вертикально' : '▭ Горизонтально';
+        $('orientation').setAttribute('aria-pressed', String(Boolean(config.landscape)));
+
+        $('productSummary').innerHTML = rows
+          .map(([k, v]) => `<div><span class="k">${k}</span><span class="v">${v}</span></div>`)
+          .join('');
+        $('chosenProduct').textContent = `${card.name} · ${card.size} · сетка ${card.grid} · ${card.colorsLabel}`;
+      }
+
+      function setStep(step) {
+        const order = ['product', 'photo', 'crop', 'generate', 'result'];
+        const index = order.indexOf(step);
+        for (const li of $('steps').children) {
+          const at = order.indexOf(li.dataset.step);
+          li.dataset.state = at === index ? 'active' : at < index ? 'done' : '';
+        }
+      }
+
+      renderProductCards();
+      setStep('product');
+
+      $('productCards').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-preset]');
+        if (!button) return;
+        state.presetId = button.dataset.preset;
+        state.presetChosen = true;
+        for (const b of $('productCards').children) b.setAttribute('aria-pressed', String(b === button));
+        $('projectsCard').hidden = false;
+
+        $('photoStep').hidden = false;
+        $('dropzone').hidden = false;
+        $('advancedCard').hidden = false;
+        $('productStep').hidden = true;
+        setStep('photo');
+        renderProductSummary();
+
+        // Новый набор — другая сетка и пропорции кадра.
+        if (state.image) {
+          state.result = null;
+          fitCrop();
+        }
+      });
+
+      $('changeProduct').addEventListener('click', () => {
+        $('productStep').hidden = false;
+        $('photoStep').hidden = true;
+        $('dropzone').hidden = true;
+        $('advancedCard').hidden = true;
+        setStep('product');
+      });
+
+      /* --- Advanced: ручные настройки --- */
+      $('manualToggle').addEventListener('click', () => {
+        state.manual = !state.manual;
+        $('manualToggle').setAttribute('aria-pressed', String(state.manual));
+        $('manualToggle').textContent = state.manual ? 'Ручные настройки включены' : 'Ручные настройки выключены';
+        $('advanced').dataset.manual = String(state.manual);
+        renderProductSummary();
+        if (state.image && !state.result) fitCrop();
+      });
+
+      /* --- режимы --- */
+      $('modes').innerHTML = MOSAIC_MODE_IDS.map(
+        (id) =>
+          `<button type="button" data-mode="${id}" aria-pressed="${id === state.modeId}">${getMode(id).label}</button>`,
+      ).join('');
+      $('modeDescription').textContent = getMode(state.modeId).description;
+      $('modes').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-mode]');
+        if (!button) return;
+        state.modeId = button.dataset.mode;
+        for (const b of $('modes').children) b.setAttribute('aria-pressed', String(b === button));
+        $('modeDescription').textContent = getMode(state.modeId).description;
+      });
+
+      /* --- палитра --- */
+      // В Advanced показываем все палитры, включая тестовые — они помечены.
+      const PALETTE_OPTIONS = [{ id: '', label: 'Без палитры' }].concat(
+        PALETTES.map((palette) => ({
+          id: palette.id,
+          label:
+            `${getPaletteLabel(palette.id)} (${palette.colors.length})` +
+            (isDeveloperPalette(palette.id) ? ' · test' : ''),
+        })),
+      );
+      $('palettes').innerHTML = PALETTE_OPTIONS.map(
+        (option) =>
+          `<button type="button" data-palette="${option.id}" aria-pressed="${option.id === state.paletteId}">${option.label}</button>`,
+      ).join('');
+      $('palettes').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-palette]');
+        if (!button) return;
+        state.paletteId = button.dataset.palette;
+        for (const b of $('palettes').children) b.setAttribute('aria-pressed', String(b === button));
+        $('metricRow').hidden = !state.paletteId;
+      });
+
+      const METRICS = [
+        ['ciede2000', 'ΔE00'],
+        ['cie94', 'ΔE94'],
+        ['cie76', 'ΔE76'],
+      ];
+      $('metricButtons').innerHTML = METRICS.map(
+        ([id, label]) => `<button type="button" data-metric="${id}" aria-pressed="${id === state.metric}">${label}</button>`,
+      ).join('');
+      $('metricButtons').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-metric]');
+        if (!button) return;
+        state.metric = button.dataset.metric;
+        for (const b of $('metricButtons').children) b.setAttribute('aria-pressed', String(b === button));
+      });
+
+      $('limits').addEventListener('click', () => {
+        state.enforceLimits = !state.enforceLimits;
+        $('limits').setAttribute('aria-pressed', String(state.enforceLimits));
+        $('limits').textContent = state.enforceLimits ? 'Учитывать запас деталей' : 'Игнорировать запас';
+      });
+      $('metricRow').hidden = !state.paletteId;
+
+      /* --- загрузка файла --- */
+      const ACCEPT = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+      function loadImageFrom(src) {
+        return new Promise((resolve, reject) => {
+          const element = new Image();
+          element.onload = () => resolve(element);
+          element.onerror = () => reject(new Error('Файл не открывается как изображение.'));
+          element.src = src;
+        });
+      }
+
+      /**
+       * Декодирование файла в картинку — тремя способами по убыванию удобства.
+       * <img> сам применяет EXIF-поворот (снимки с телефона часто «лежат на
+       * боку» в байтах), поэтому он первый. Если blob: или data: закрыты
+       * политикой страницы, остаётся createImageBitmap — ему адрес не нужен.
+       */
+      async function decodeImageFile(file) {
+        const url = URL.createObjectURL(file);
+        try {
+          const element = await loadImageFrom(url);
+          return { element, release: () => URL.revokeObjectURL(url) };
+        } catch {
+          URL.revokeObjectURL(url);
+        }
+        try {
+          const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          const element = await loadImageFrom(dataUrl);
+          return { element, release: () => {} };
+        } catch {
+          /* следующий способ */
+        }
+        if (typeof createImageBitmap === 'function') {
+          const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' }).catch(() =>
+            createImageBitmap(file),
+          );
+          return { element: bitmap, release: () => bitmap.close && bitmap.close() };
+        }
+        throw new Error('Файл не открывается как изображение.');
+      }
+
+      async function openFile(file) {
+        if (!file) return;
+
+        // Метаданные, затем сигнатура первых байтов: расширение легко подделать.
+        const meta = validateFileMeta(file);
+        if (!meta.ok) {
+          showError(meta.error);
+          return;
+        }
+        const head = await readFileHead(file);
+        const checked = validateFileBytes(file, head);
+        if (!checked.ok) {
+          showError(checked.error);
+          return;
+        }
+        showError('');
+        setStage('loading', 0.3);
+        let decoded;
+        try {
+          decoded = await decodeImageFile(file);
+        } catch (cause) {
+          showError(cause.message || 'Файл не открывается как изображение.');
+          setStage('idle', 0);
+          return;
+        }
+        const element = decoded.element;
+        // У <img> размеры в naturalWidth, у ImageBitmap — в width.
+        const naturalWidth = element.naturalWidth || element.width;
+        const naturalHeight = element.naturalHeight || element.height;
+        if (!naturalWidth) {
+          showError('Файл не открывается как изображение.');
+          setStage('idle', 0);
+          return;
+        }
+
+        const sizeCheck = validateImageSize(naturalWidth, naturalHeight);
+        if (!sizeCheck.ok && sizeCheck.code === 'image_too_small') {
+          showError(sizeCheck.error);
+          setStage('idle', 0);
+          return;
+        }
+
+        // Слишком большие снимки уменьшаем до лимита — иначе вкладке не хватит памяти.
+        const plan = planDownscale(naturalWidth, naturalHeight);
+        let source = element;
+        if (plan.needed) {
+          const canvas = document.createElement('canvas');
+          canvas.width = plan.width;
+          canvas.height = plan.height;
+          const context = canvas.getContext('2d');
+          context.imageSmoothingQuality = 'high';
+          context.drawImage(element, 0, 0, plan.width, plan.height);
+          source = canvas;
+          decoded.release();
+        }
+
+        state.image = {
+          element: source,
+          width: plan.needed ? plan.width : naturalWidth,
+          height: plan.needed ? plan.height : naturalHeight,
+          name: file.name,
+          size: file.size,
+          downscaled: plan.needed,
+        };
+        state.result = null;
+        state.cropped = null;
+        $('dropzone').hidden = true;
+        $('workspace').hidden = false;
+        $('result').hidden = true;
+        $('download').hidden = true;
+        $('regenerate').hidden = true;
+        $('back').hidden = true;
+        $('cropStage').hidden = false;
+        $('cropTools').hidden = false;
+        $('generate').hidden = false;
+        renderProductSummary();
+        // Шаг 2 отработал — дальше на экране только кадр и результат.
+        $('photoStep').hidden = true;
+        $('dropzone').hidden = true;
+        $('advancedCard').hidden = false;
+        setStep('crop');
+        $('capacityStatus').hidden = true;
+        $('sourceInfo').textContent =
+          `${file.name} · ${state.image.width}×${state.image.height} · ${(file.size / 1024).toFixed(0)} КБ` +
+          (state.image.downscaled ? ` (уменьшено с ${naturalWidth}×${naturalHeight})` : '');
+        setStage('processing', 0.5);
+        fitCrop();
+      }
+
+      $('pick').addEventListener('click', () => $('file').click());
+      $('another').addEventListener('click', () => $('file').click());
+      $('file').addEventListener('change', (event) => {
+        openFile(event.target.files[0]);
+        event.target.value = '';
+      });
+      for (const type of ['dragenter', 'dragover']) {
+        $('dropzone').addEventListener(type, (event) => {
+          event.preventDefault();
+          $('dropzone').classList.add('over');
+        });
+      }
+      $('dropzone').addEventListener('dragleave', () => $('dropzone').classList.remove('over'));
+      $('dropzone').addEventListener('drop', (event) => {
+        event.preventDefault();
+        $('dropzone').classList.remove('over');
+        openFile(event.dataTransfer.files[0]);
+      });
+      $('reset').addEventListener('click', () => {
+        state.image = null;
+        state.result = null;
+        state.cropped = null;
+        state.capacity = null;
+        $('workspace').hidden = true;
+        $('capacityStatus').hidden = true;
+        $('productStep').hidden = false;
+        $('photoStep').hidden = true;
+        $('dropzone').hidden = true;
+        $('advancedCard').hidden = true;
+        setStep('product');
+        setStage('idle', 0);
+        showError('');
+      });
+
+      /* --- кадрирование --- */
+      const cropCanvas = $('crop');
+
+      /**
+       * Сетка кадрирования и генерации: из выбранного набора, а в ручном
+       * режиме — из настроек Advanced.
+       */
+      function preset() {
+        const config = activeConfig();
+        return { id: config.preset.id, cols: config.cols, rows: config.rows };
+      }
+
+      function frameRect() {
+        const box = $('cropStage').getBoundingClientRect();
+        const p = preset();
+        const aspect = p.cols / p.rows;
+        const availableWidth = box.width - 40;
+        const availableHeight = box.height - 40;
+        let width = availableWidth;
+        let height = width / aspect;
+        if (height > availableHeight) {
+          height = availableHeight;
+          width = height * aspect;
+        }
+        return { x: (box.width - width) / 2, y: (box.height - height) / 2, width, height, boxWidth: box.width, boxHeight: box.height };
+      }
+
+      function minScale() {
+        const f = frameRect();
+        return Math.max(f.width / state.image.width, f.height / state.image.height);
+      }
+
+      function clampView() {
+        const f = frameRect();
+        const scale = minScale() * state.view.zoom;
+        state.view.x = clamp(state.view.x, f.x + f.width - state.image.width * scale, f.x);
+        state.view.y = clamp(state.view.y, f.y + f.height - state.image.height * scale, f.y);
+      }
+
+      function fitCrop() {
+        if (!state.image) return;
+        const f = frameRect();
+        const scale = minScale();
+        state.view = {
+          zoom: 1,
+          x: f.x + (f.width - state.image.width * scale) / 2,
+          y: f.y + (f.height - state.image.height * scale) / 2,
+        };
+        $('zoom').value = '1';
+        drawCrop();
+      }
+
+      function drawCrop() {
+        if (!state.image) return;
+        const f = frameRect();
+        const dpr = window.devicePixelRatio || 1;
+        cropCanvas.width = Math.round(f.boxWidth * dpr);
+        cropCanvas.height = Math.round(f.boxHeight * dpr);
+        cropCanvas.style.width = f.boxWidth + 'px';
+        cropCanvas.style.height = f.boxHeight + 'px';
+        const ctx = cropCanvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, f.boxWidth, f.boxHeight);
+        const scale = minScale() * state.view.zoom;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(state.image.element, state.view.x, state.view.y, state.image.width * scale, state.image.height * scale);
+        ctx.fillStyle = 'rgba(238,239,242,0.82)';
+        ctx.beginPath();
+        ctx.rect(0, 0, f.boxWidth, f.boxHeight);
+        ctx.rect(f.x, f.y, f.width, f.height);
+        ctx.fill('evenodd');
+        ctx.strokeStyle = 'rgba(16,19,24,0.85)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(f.x + 0.5, f.y + 0.5, f.width - 1, f.height - 1);
+      }
+
+      function cropRect() {
+        const f = frameRect();
+        const scale = minScale() * state.view.zoom;
+        const x = clamp((f.x - state.view.x) / scale, 0, state.image.width);
+        const y = clamp((f.y - state.view.y) / scale, 0, state.image.height);
+        return {
+          x,
+          y,
+          width: clamp(f.width / scale, 1, state.image.width - x),
+          height: clamp(f.height / scale, 1, state.image.height - y),
+        };
+      }
+
+      function exportCrop(maxSize = CROP_EXPORT_SIZE) {
+        const crop = cropRect();
+        const scale = Math.min(1, maxSize / Math.max(crop.width, crop.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(crop.width * scale));
+        canvas.height = Math.max(1, Math.round(crop.height * scale));
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(state.image.element, crop.x, crop.y, crop.width, crop.height, 0, 0, canvas.width, canvas.height);
+        return canvas;
+      }
+
+      // Один палец (или мышь) двигает кадр, два пальца — масштабируют
+      // вокруг точки между ними. Указатели отслеживаются по pointerId.
+      let dragging = null;
+      let pinch = null;
+      const pointers = new Map();
+
+      function pinchGeometry() {
+        const [a, b] = [...pointers.values()];
+        const rect = cropCanvas.getBoundingClientRect();
+        return {
+          distance: Math.hypot(a.x - b.x, a.y - b.y),
+          x: (a.x + b.x) / 2 - rect.left,
+          y: (a.y + b.y) / 2 - rect.top,
+        };
+      }
+
+      cropCanvas.addEventListener('pointerdown', (event) => {
+        if (!state.image) return;
+        event.preventDefault();
+        try {
+          cropCanvas.setPointerCapture(event.pointerId);
+        } catch {
+          /* указатель уже отпущен или синтетический — захват не обязателен */
+        }
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if (pointers.size >= 2) {
+          dragging = null;
+          const start = pinchGeometry();
+          pinch = { ...start, zoom: state.view.zoom, viewX: state.view.x, viewY: state.view.y };
+        } else {
+          dragging = { x: event.clientX - state.view.x, y: event.clientY - state.view.y };
+        }
+      });
+      cropCanvas.addEventListener('pointermove', (event) => {
+        if (!pointers.has(event.pointerId)) return;
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if (pinch && pointers.size >= 2) {
+          const now = pinchGeometry();
+          const ratio = pinch.distance > 0 ? now.distance / pinch.distance : 1;
+          const zoom = clamp(pinch.zoom * ratio, 1, 8);
+          const scaleRatio = zoom / pinch.zoom;
+          // Точка под пальцами остаётся на месте, плюс сдвиг вслед за пальцами.
+          state.view.x = pinch.x - (pinch.x - pinch.viewX) * scaleRatio + (now.x - pinch.x);
+          state.view.y = pinch.y - (pinch.y - pinch.viewY) * scaleRatio + (now.y - pinch.y);
+          state.view.zoom = zoom;
+          clampView();
+          $('zoom').value = String(zoom);
+          drawCrop();
+          return;
+        }
+        if (!dragging) return;
+        state.view.x = event.clientX - dragging.x;
+        state.view.y = event.clientY - dragging.y;
+        clampView();
+        drawCrop();
+      });
+      const stopDrag = (event) => {
+        pointers.delete(event.pointerId);
+        if (pointers.size < 2) pinch = null;
+        if (pointers.size === 1) {
+          // Один палец остался — продолжаем как перетаскивание.
+          const [rest] = [...pointers.values()];
+          dragging = { x: rest.x - state.view.x, y: rest.y - state.view.y };
+        } else if (pointers.size === 0) {
+          dragging = null;
+        }
+      };
+      cropCanvas.addEventListener('pointerup', stopDrag);
+      cropCanvas.addEventListener('pointercancel', stopDrag);
+      cropCanvas.addEventListener('lostpointercapture', stopDrag);
+      cropCanvas.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        const rect = cropCanvas.getBoundingClientRect();
+        setZoom(state.view.zoom * Math.exp(-event.deltaY / 400), event.clientX - rect.left, event.clientY - rect.top);
+      }, { passive: false });
+
+      function setZoom(next, anchorX, anchorY) {
+        const zoom = clamp(next, 1, 8);
+        const ratio = zoom / state.view.zoom;
+        state.view.x = anchorX - (anchorX - state.view.x) * ratio;
+        state.view.y = anchorY - (anchorY - state.view.y) * ratio;
+        state.view.zoom = zoom;
+        clampView();
+        $('zoom').value = String(zoom);
+        drawCrop();
+      }
+
+      $('zoom').addEventListener('input', (event) => {
+        const f = frameRect();
+        setZoom(Number(event.target.value), f.x + f.width / 2, f.y + f.height / 2);
+      });
+      $('fit').addEventListener('click', fitCrop);
+
+      /** Вернуться к кадру после смены ориентации или поворота: старый результат уже не про этот кадр. */
+      function backToCrop() {
+        state.result = null;
+        state.cropped = null;
+        state.variants = null;
+        $('variantStrip').innerHTML = '';
+        $('result').hidden = true;
+        $('download').hidden = true;
+        $('regenerate').hidden = true;
+        $('back').hidden = true;
+        $('brickView').hidden = true;
+        $('capacityStatus').hidden = true;
+        $('cropStage').hidden = false;
+        $('cropTools').hidden = false;
+        $('generate').hidden = false;
+        setStep('crop');
+        setStage('processing', 0.5);
+      }
+
+      // Та же картина горизонтально: сетка 64×96 становится 96×64, деталей столько же.
+      $('orientation').addEventListener('click', () => {
+        state.orientation = state.orientation === 'landscape' ? 'portrait' : 'landscape';
+        backToCrop();
+        renderProductSummary();
+        requestAnimationFrame(fitCrop);
+      });
+
+      // Поворот фотографии на 90° по часовой: снимок с телефона иногда лежит на боку.
+      $('rotate').addEventListener('click', () => {
+        if (!state.image) return;
+        const { element, width, height } = state.image;
+        const canvas = document.createElement('canvas');
+        canvas.width = height;
+        canvas.height = width;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(height, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.drawImage(element, 0, 0, width, height);
+        if (element.close) element.close();
+        state.image = { ...state.image, element: canvas, width: height, height: width };
+        backToCrop();
+        requestAnimationFrame(fitCrop);
+      });
+      window.addEventListener('resize', () => {
+        if (state.image && !state.result) {
+          clampView();
+          drawCrop();
+        }
+      });
+
+      /* --- генерация --- */
+      async function generate() {
+        if (!state.image) return;
+        $('generate').disabled = true;
+        $('regenerate').disabled = true;
+        $('cancel').hidden = false;
+
+        const controller = new AbortController();
+        state.controller = controller;
+
+        try {
+          const source = state.cropped ?? exportCrop();
+          const config = activeConfig();
+          state.cropped = source;
+
+          // Сразу считаем все варианты обработки: пользователь выбирает
+          // результат глазами из ленты, а не настраивает параметры.
+          const set = await generateVariants({
+            source,
+            cols: config.cols,
+            rows: config.rows,
+            palette: config.palette ?? null,
+            modeId: config.modeId,
+            distanceMetric: config.metric,
+            enforcePieceLimits: config.enforceLimits,
+            category: config.preset.category,
+            targetOutputSize: OUTPUT_SIZE,
+            signal: controller.signal,
+            onProgress: ({ value, message }) => {
+              if (controller.signal.aborted) return;
+              setStage('generating', value);
+              if (message) $('stageHint').textContent = message;
+            },
+          });
+
+          if (controller.signal.aborted) throw new CancelledError();
+
+          state.variants = set.variants;
+          state.selectedVariant = set.variants[0].id;
+          state.result = set.variants[0].mosaic;
+          state.keepVariants = true;
+          // Сеанс — одна лента вариантов: по нему сводка выборов понимает,
+          // что несколько кликов подряд были сравнением, а решение — последний.
+          state.generationId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+          showResult();
+          renderVariantStrip();
+          $('stageHint').textContent = '';
+          setStage('done', 1);
+        } catch (cause) {
+          if (cause && cause.name === 'CancelledError') {
+            setStage('processing', 0.5);
+            state.cancelled = true;
+          } else {
+            showError(cause.message ?? 'Генерация не удалась.');
+          }
+        } finally {
+          state.controller = null;
+          $('cancel').hidden = true;
+          $('generate').disabled = false;
+          $('regenerate').disabled = false;
+        }
+      }
+
+      $('cancel').addEventListener('click', () => state.controller?.abort());
+
+      // Показ результата деталями с объёмом — так виден настоящий набор,
+      // а не пиксельная картинка. На данные это не влияет.
+      $('brickView').addEventListener('click', () => {
+        state.brickView = !state.brickView;
+        $('brickView').setAttribute('aria-pressed', String(state.brickView));
+        $('brickView').textContent = state.brickView ? 'Вид: детали' : 'Вид: пиксели';
+        if (state.result) showResult();
+      });
+
+      function paint(canvas, source) {
+        canvas.width = source.width;
+        canvas.height = source.height;
+        canvas.getContext('2d').drawImage(source, 0, 0);
+      }
+
+      function showResult() {
+        const { result, cropped } = state;
+        paint($('originalView'), cropped);
+        // Превью перерисовывается в выбранном виде; сетка цветов та же.
+        const view = state.brickView
+          ? renderMosaicToCanvas(result.grid, { cellSize: result.cellSize, shape: 'brick' })
+          : result.canvas;
+        paint($('mosaicView'), view);
+        $('compareBox').style.aspectRatio = `${result.grid.cols} / ${result.grid.rows}`;
+        // Ширина из высоты: высокий кадр 2:3 не растягивается на весь экран.
+        $('compareBox').style.width = `min(100%, calc(var(--fit-height) * ${result.grid.cols} / ${result.grid.rows}))`;
+        $('cropStage').hidden = true;
+        $('cropTools').hidden = true;
+        $('generate').hidden = true;
+        $('result').hidden = false;
+        $('download').hidden = false;
+        $('brickView').hidden = false;
+        $('regenerate').hidden = false;
+        $('back').hidden = false;
+        applySplit();
+        applyViewZoom();
+        renderCapacity(result);
+        renderPaletteReport(result);
+        renderFaceReport(result);
+        renderBuildMode(result);
+        setStep('result');
+        $('abPreview').innerHTML = '';
+        if (!state.keepVariants) {
+          $('variantStrip').innerHTML = '';
+          state.variants = null;
+          state.selectedVariant = null;
+        }
+        state.keepVariants = false;
+        const first = result.grid.cells[0];
+        $('stats').innerHTML = [
+          ['Сетка', `${result.grid.cols} × ${result.grid.rows}`],
+          ['Ячеек', result.grid.cells.length],
+          ['PNG', `${getCellSize(result.grid.cols, result.grid.rows, TARGET_OUTPUT_SIZE) * result.grid.cols} × ${getCellSize(result.grid.cols, result.grid.rows, TARGET_OUTPUT_SIZE) * result.grid.rows}`],
+          ['Время', `${result.durationMs} мс`],
+          ['Первая ячейка', `${first.hex}`],
+        ]
+          .map(([k, v]) => `<div><dt>${k}</dt><dd data-stat="${k}">${v}</dd></div>`)
+          .join('');
+      }
+
+      function renderPaletteReport(result) {
+        const report = $('paletteReport');
+        if (!result.palette) {
+          report.hidden = true;
+          return;
+        }
+        report.hidden = false;
+        const { usage } = result.palette;
+        const total = usage.reduce((sum, item) => sum + item.count, 0);
+        const limits = result.pieceLimit;
+        const requirementById = new Map((limits?.requirements ?? []).map((item) => [item.color.id, item]));
+        $('limitSummary').textContent = limits
+          ? limits.feasible
+            ? `Запас деталей учтён: переназначено ${formatNumber(limits.moved)} ячеек, +ΔE ${limits.addedError.toFixed(2)}, ${limits.durationMs} мс`
+            : `Деталей не хватает: ${formatNumber(limits.totalCells)} ячеек против ${formatNumber(limits.totalAvailable)} деталей`
+          : 'Запас деталей не учитывается';
+
+        $('legendBar').innerHTML = usage
+          .map(
+            (item) =>
+              `<span title="${item.color.name}" style="background:${item.color.hex};width:${Math.max(item.share * 100, 0.4)}%"></span>`,
+          )
+          .join('');
+
+        $('legendItems').innerHTML = usage
+          .map(
+            (item) =>
+              `<span style="font-size:12px"><i class="swatch" style="background:${item.color.hex}"></i>${item.color.name} <b>${formatNumber(item.count)}</b></span>`,
+          )
+          .join('');
+
+        $('paletteStats').querySelector('tbody').innerHTML = usage
+          .map(
+            (item) => {
+              const requirement = requirementById.get(item.color.id);
+              const status = requirement ? requirement.status : '—';
+              return `<tr data-color="${item.color.id}">
+              <td><i class="swatch" style="background:${item.color.hex}"></i>${item.color.name}</td>
+              <td class="num">${item.color.hex}</td>
+              <td class="num" data-count>${formatNumber(item.count)}</td>
+              <td class="num">${(item.share * 100).toFixed(1)}%</td>
+              <td class="num" data-available>${formatNumber(item.color.availableQuantity)}</td>
+              <td class="num" data-status="${status}">${status}</td>
+            </tr>`;
+            },
+          )
+          .join('');
+
+        $('paletteStats').querySelector('tfoot').innerHTML =
+          `<tr><td>Итого</td><td></td><td class="num" data-total>${formatNumber(total)}</td><td class="num">100%</td><td></td><td></td></tr>`;
+      }
+
+      /* --- проекты --- */
+      const store = new ProjectStore();
+      store.cleanup();
+
+      function showNotice(text) {
+        $('notice').textContent = text;
+        $('notice').hidden = !text;
+      }
+
+      function renderProjects() {
+        const projects = store.list();
+        $('projectsCard').hidden = !state.presetChosen;
+        $('projectsCount').textContent = `${projects.length} в истории`;
+
+        if (!store.available) {
+          $('projectsList').innerHTML = '<li>Браузер не даёт сохранять проекты (приватный режим).</li>';
+          return;
+        }
+
+        $('projectsList').innerHTML = projects
+          .map(
+            (project) => `<li data-project="${project.id}" data-current="${project.id === state.projectId}">
+              ${project.thumbnail ? `<img src="${project.thumbnail}" alt="">` : '<span class="swatch"></span>'}
+              <span class="meta">
+                <b data-name>${project.name}</b>
+                <small>${project.stats.cols}×${project.stats.rows} · ${project.stats.colors} цветов · ${formatRelativeTime(project.updatedAt)}</small>
+              </span>
+              <button type="button" data-action="rename">Переименовать</button>
+              <button type="button" data-action="share">Поделиться</button>
+              <button type="button" data-action="delete">Удалить</button>
+            </li>`,
+          )
+          .join('');
+      }
+
+      function currentSettings() {
+        return {
+          modeId: state.modeId,
+          sizeId: state.sizeId,
+          paletteId: state.paletteId || null,
+          distanceMetric: state.metric,
+          enforcePieceLimits: state.enforceLimits,
+          shape: 'square',
+          gap: 0,
+          showGrid: false,
+          colorSpace: 'srgb',
+        };
+      }
+
+      $('saveProject').addEventListener('click', () => {
+        if (!state.result) {
+          showNotice('Сначала создайте мозаику.');
+          return;
+        }
+        const saved = store.save({
+          id: state.projectId ?? undefined,
+          name: $('projectName').value,
+          photoName: state.image?.name,
+          thumbnail: makeThumbnail(state.result.canvas),
+          settings: currentSettings(),
+          stats: {
+            cols: state.result.grid.cols,
+            rows: state.result.grid.rows,
+            pieces: state.result.grid.cells.length,
+            colors: state.result.palette?.usage.length ?? 0,
+            faces: state.result.faces.length,
+            durationMs: state.result.durationMs,
+          },
+        });
+
+        if (!saved.ok) {
+          showNotice(saved.error ?? 'Не удалось сохранить проект.');
+          return;
+        }
+        state.projectId = saved.project.id;
+        renderProjects();
+        showNotice(saved.evicted > 0 ? `Сохранено, ${saved.evicted} старых проектов убрано ради места.` : 'Проект сохранён.');
+      });
+
+      $('shareProject').addEventListener('click', async () => {
+        const url = buildShareUrl(location.href.split('#')[0], {
+          version: 1,
+          name: $('projectName').value,
+          settings: currentSettings(),
+        });
+        state.shareUrl = url;
+        const outcome = await shareProject(url, $('projectName').value);
+        showNotice(
+          outcome === 'copied'
+            ? 'Ссылка скопирована — в ней только настройки, фотография остаётся у вас.'
+            : outcome === 'shared'
+              ? 'Ссылка отправлена.'
+              : 'Скопируйте ссылку из строки браузера.',
+        );
+      });
+
+      $('projectsList').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        const item = event.target.closest('li[data-project]');
+        if (!item) return;
+        const id = item.dataset.project;
+
+        if (!button) {
+          const project = store.get(id);
+          if (!project) return;
+          state.projectId = id;
+          state.sizeId = project.settings.sizeId;
+          state.paletteId = project.settings.paletteId ?? '';
+          state.modeId = project.settings.modeId;
+          state.enforceLimits = project.settings.enforcePieceLimits;
+          $('projectName').value = project.name;
+          syncControls();
+          renderProjects();
+          showNotice('Настройки проекта загружены. Фотография не сохраняется — выберите её заново.');
+          return;
+        }
+
+        if (button.dataset.action === 'rename') {
+          const project = store.get(id);
+          const name = prompt('Название проекта', project?.name ?? '');
+          if (name !== null) {
+            store.rename(id, name);
+            renderProjects();
+          }
+        } else if (button.dataset.action === 'delete') {
+          store.remove(id);
+          if (state.projectId === id) state.projectId = null;
+          renderProjects();
+        } else if (button.dataset.action === 'share') {
+          const project = store.get(id);
+          if (!project) return;
+          const url = buildShareUrl(location.href.split('#')[0], {
+            version: 1,
+            name: project.name,
+            settings: project.settings,
+          });
+          state.shareUrl = url;
+          shareProject(url, project.name).then((outcome) =>
+            showNotice(outcome === 'failed' ? 'Скопируйте ссылку из строки браузера.' : 'Ссылка готова.'),
+          );
+        }
+      });
+
+      /** Приводит кнопки в соответствие состоянию. */
+      function syncControls() {
+        for (const b of $('sizes').children) b.setAttribute('aria-pressed', String(b.dataset.size === state.sizeId));
+        for (const b of $('palettes').children)
+          b.setAttribute('aria-pressed', String(b.dataset.palette === (state.paletteId || '')));
+        for (const b of $('modes').children) b.setAttribute('aria-pressed', String(b.dataset.mode === state.modeId));
+        for (const b of $('metricButtons').children)
+          b.setAttribute('aria-pressed', String(b.dataset.metric === state.metric));
+        $('limits').setAttribute('aria-pressed', String(state.enforceLimits));
+        $('limits').textContent = state.enforceLimits ? 'Учитывать запас деталей' : 'Игнорировать запас';
+        $('modeDescription').textContent = getMode(state.modeId).description;
+        $('metricRow').hidden = !state.paletteId;
+      }
+
+      const shared = readShareUrl(location.href);
+      if (shared) {
+        state.sizeId = shared.settings.sizeId;
+        state.paletteId = shared.settings.paletteId ?? '';
+        state.modeId = shared.settings.modeId;
+        state.metric = shared.settings.distanceMetric;
+        state.enforceLimits = shared.settings.enforcePieceLimits;
+        $('projectName').value = shared.name;
+        syncControls();
+        showNotice('Настройки взяты из ссылки. Загрузите свою фотографию — исходник не передаётся.');
+      }
+
+      renderProjects();
+
+      /* --- инструкция по сборке --- */
+      const BLOCK_SIZES = [4, 8, 16];
+      $('blockSizes').innerHTML = BLOCK_SIZES.map(
+        (size) =>
+          `<button type="button" data-block-size="${size}" aria-pressed="${size === state.blockSize}">${size}×${size}</button>`,
+      ).join('');
+
+      $('blockSizes').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-block-size]');
+        if (!button) return;
+        state.blockSize = Number(button.dataset.blockSize);
+        for (const b of $('blockSizes').children) b.setAttribute('aria-pressed', String(b === button));
+        if (state.result) renderBuildMode(state.result);
+      });
+
+      function renderBuildMode(result) {
+        state.plan = buildInstructionPlan(result.grid, {
+          blockSize: state.blockSize,
+          palette: activeConfig().palette ?? null,
+        });
+        state.step = 0;
+        paint($('overview').querySelector('canvas'), result.canvas);
+        $('blockLegend').innerHTML = state.plan.legend
+          .map(
+            (entry) =>
+              `<li><span style="font-family:'IBM Plex Mono',monospace;width:16px">${entry.number}</span><i class="swatch" style="background:${entry.hex}"></i>${entry.name}<b>${formatNumber(entry.total)}</b></li>`,
+          )
+          .join('');
+        renderBlock();
+      }
+
+      function renderBlock() {
+        const plan = state.plan;
+        if (!plan) return;
+        const block = plan.blocks[state.step];
+
+        $('stepLabel').textContent = `Шаг ${state.step + 1} / ${plan.blocks.length}`;
+        $('blockMeta').textContent = `${block.blockId} · строка ${block.row + 1}, столбец ${block.column + 1}`;
+        $('blockProgress').firstElementChild.style.width = `${((state.step + 1) / plan.blocks.length) * 100}%`;
+        $('prevBlock').disabled = state.step === 0;
+        $('nextBlock').disabled = state.step >= plan.blocks.length - 1;
+
+        const grid = $('blockGrid');
+        grid.style.gridTemplateColumns = `repeat(${block.width}, minmax(0, 1fr))`;
+        grid.dataset.block = block.blockId;
+        grid.innerHTML = block.cells
+          .map(
+            (cell, index) =>
+              `<div style="background:${cell.hex};color:${contrastInk(cell.rgb)}" data-cell-number="${block.numbers[index]}">${block.numbers[index]}</div>`,
+          )
+          .join('');
+
+        $('blockCounts').innerHTML = block.counts
+          .map(
+            (count) =>
+              `<span><i class="swatch" style="background:${count.hex}"></i>${count.number} ${count.name} ×${count.count}</span>`,
+          )
+          .join('');
+
+        const highlight = $('highlight');
+        highlight.style.left = `${(block.x / plan.cols) * 100}%`;
+        highlight.style.top = `${(block.y / plan.rows) * 100}%`;
+        highlight.style.width = `${(block.width / plan.cols) * 100}%`;
+        highlight.style.height = `${(block.height / plan.rows) * 100}%`;
+      }
+
+      $('prevBlock').addEventListener('click', () => {
+        state.step = Math.max(0, state.step - 1);
+        renderBlock();
+      });
+      $('nextBlock').addEventListener('click', () => {
+        state.step = Math.min(state.plan.blocks.length - 1, state.step + 1);
+        renderBlock();
+      });
+
+      $('downloadPdf').addEventListener('click', async () => {
+        if (!state.plan || !state.result) return;
+        const button = $('downloadPdf');
+        button.disabled = true;
+        button.textContent = 'Собираю PDF…';
+        try {
+          const font = await loadPdfFont();
+          const mosaic = await canvasToJpeg(state.result.canvas);
+          const original = state.cropped ? await canvasToJpeg(state.cropped) : null;
+
+          const bytes = buildInstructionPdf({
+            plan: state.plan,
+            font,
+            mosaic,
+            original,
+            usage: state.result.palette?.usage,
+            requirements: state.result.pieceLimit?.requirements,
+            meta: {
+              title: 'Инструкция по сборке',
+              photoName: state.image?.name,
+              paletteLabel: state.paletteId ? getPaletteLabel(state.paletteId) : undefined,
+              modeLabel: getMode(state.result.mode).label,
+              createdAt: new Date(),
+            },
+          });
+
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          await saveFile(blob, `mosaic-instruction-${state.plan.cols}x${state.plan.rows}.pdf`);
+        } catch (cause) {
+          showError(cause.message ?? 'Не удалось собрать PDF.');
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Скачать PDF';
+        }
+      });
+
+      /** Понятный статус набора. Технические состояния — только в Advanced. */
+      function renderCapacity(result) {
+        const config = activeConfig();
+        const status = describeCapacity(config.preset, result.pieceLimit);
+        state.capacity = status;
+
+        const box = $('capacityStatus');
+        box.hidden = false;
+        box.dataset.level = status.level;
+        box.querySelector('[data-capacity-title]').textContent = status.title;
+        box.querySelector('[data-capacity-detail]').textContent = status.detail;
+
+        $('capacityDebug').textContent =
+          `feasible: ${status.debug.feasible} · satisfied: ${status.debug.satisfied} · ` +
+          `перекрашено ${status.reassigned} · превышения: ${status.debug.overflowColors.join(', ') || 'нет'}`;
+      }
+
+      /** Лента вариантов: миниатюра, название и короткое пояснение. */
+      function renderVariantStrip() {
+        const strip = $('variantStrip');
+        if (!state.variants) {
+          strip.innerHTML = '';
+          return;
+        }
+
+        strip.innerHTML = state.variants
+          .map(
+            (variant) => `<figure data-variant="${variant.id}" aria-selected="${variant.id === state.selectedVariant}"
+              title="${variant.description}">
+              <canvas></canvas>
+              <figcaption>${variant.name}</figcaption>
+            </figure>`,
+          )
+          .join('');
+
+        // В ленту идут миниатюры: полноразмерные копии одиннадцати вариантов
+        // на телефоне не поместились бы в память canvas.
+        for (const variant of state.variants) {
+          paint(strip.querySelector(`[data-variant="${variant.id}"] canvas`), createVariantThumbnail(variant, 320));
+        }
+
+        const current = state.variants.find((variant) => variant.id === state.selectedVariant);
+        $('variantHint').textContent = current ? current.description : '';
+      }
+
+      $('variantStrip').addEventListener('click', (event) => {
+        const figure = event.target.closest('figure[data-variant]');
+        if (!figure || !state.variants) return;
+
+        const variant = state.variants.find((item) => item.id === figure.dataset.variant);
+        if (!variant) return;
+
+        // Выбранный вариант становится главным результатом.
+        state.selectedVariant = variant.id;
+        state.result = variant.mosaic;
+        state.keepVariants = true;
+        showResult();
+        renderVariantStrip();
+        recordChoice(variant);
+      });
+
+      /**
+       * Обратная связь: какой вариант люди выбирают на самом деле.
+       *
+       * Метрики говорят, что лучше по числам; выбор пользователя говорит,
+       * что лучше глазами. Копим выборы локально, экспорт — в Advanced.
+       * Никаких фотографий, только id варианта, набор и найдено ли лицо.
+       */
+      function recordChoice(variant) {
+        try {
+          const key = 'mosaic.choices.v1';
+          const list = JSON.parse(localStorage.getItem(key) ?? '[]');
+          list.push({
+            t: Date.now(),
+            variant: variant.id,
+            preset: state.presetId,
+            faces: variant.mosaic.faces.length,
+            score: Math.round(variant.qualityScore.total * 100),
+            session: state.generationId ?? null,
+            index: state.variants ? state.variants.findIndex((item) => item.id === variant.id) : null,
+          });
+          localStorage.setItem(key, JSON.stringify(list.slice(-500)));
+        } catch {
+          // приватный режим — просто не копим
+        }
+      }
+
+      $('exportChoices').addEventListener('click', () => {
+        let list = [];
+        try {
+          list = JSON.parse(localStorage.getItem('mosaic.choices.v1') ?? '[]');
+        } catch {
+          /* хранилище недоступно — экспортируем пустой список */
+        }
+        const counts = {};
+        for (const item of list) counts[item.variant] = (counts[item.variant] ?? 0) + 1;
+        const blob = new Blob([JSON.stringify({ total: list.length, byVariant: counts, choices: list }, null, 1)], { type: 'application/json' });
+        saveFile(blob, 'mosaic-choices.json');
+        showNotice(list.length ? `Выборов записано: ${list.length}. Чаще всего: ${Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${k}×${v}`).join(', ')}` : 'Пока ни одного выбора.');
+      });
+
+      function renderFaceReport(result) {
+        const report = $('faceReport');
+        const mode = getMode(result.mode);
+        if (!mode.faceDetection) {
+          report.hidden = true;
+          return;
+        }
+        report.hidden = false;
+        if (!result.faces.length) {
+          $('faceInfo').textContent = 'Лиц не найдено — мозаика построена обычным способом.';
+          return;
+        }
+        const counts = result.weightMap.counts;
+        $('faceInfo').textContent =
+          result.faces
+            .map(
+              (face, index) =>
+                `#${index + 1} ${Math.round(face.face.width)}×${Math.round(face.face.height)} px, глаза: ${face.eyes.length}, рот: ${face.mouth ? 'да' : 'нет'}, волосы: ${face.hair ? 'да' : 'нет'}`,
+            )
+            .join(' · ') +
+          ` — защищено ячеек: глаза ${counts.eyes}, рот ${counts.mouth}, контур ${counts.contour}, лицо ${counts.face}`;
+      }
+
+      async function buildComparison() {
+        if (!state.cropped) return;
+        $('compare').disabled = true;
+        $('compare').textContent = 'Считаю…';
+        try {
+          const p = preset();
+          const items = [];
+          for (const modeId of AB_PREVIEW_MODES) {
+            items.push({
+              modeId,
+              result: await generateMosaic({
+                source: state.cropped,
+                cols: p.cols,
+                rows: p.rows,
+                mode: modeId,
+                palette: state.paletteId ? getPalette(state.paletteId) : undefined,
+                enforcePieceLimits: state.enforceLimits && Boolean(state.paletteId),
+                targetOutputSize: 512,
+              }),
+            });
+          }
+
+          $('abPreview').innerHTML =
+            '<figure data-preview="original"><canvas></canvas><figcaption>Original<small>кадр без обработки</small></figcaption></figure>' +
+            items
+              .map(
+                (item) =>
+                  `<figure data-preview="${item.modeId}"><canvas></canvas><figcaption>${getMode(item.modeId).label}<small>${
+                    getMode(item.modeId).faceDetection
+                      ? item.result.faces.length
+                        ? 'лицо найдено: ' + item.result.faces.length
+                        : 'лиц не найдено'
+                      : 'без поиска лиц'
+                  }</small></figcaption></figure>`,
+              )
+              .join('');
+
+          paint($('abPreview').querySelector('[data-preview="original"] canvas'), state.cropped);
+          for (const item of items) {
+            paint($('abPreview').querySelector(`[data-preview="${item.modeId}"] canvas`), item.result.canvas);
+          }
+        } finally {
+          $('compare').disabled = false;
+          $('compare').textContent = 'Сравнить режимы';
+        }
+      }
+
+      $('compare').addEventListener('click', buildComparison);
+
+      function applySplit() {
+        const value = Number($('split').value);
+        $('clip').style.clipPath = `inset(0 0 0 ${value}%)`;
+        $('divider').style.left = value + '%';
+      }
+
+      function applyViewZoom() {
+        const zoom = Number($('viewZoom').value);
+        const transform = `scale(${zoom})`;
+        $('originalLayer').style.transform = transform;
+        $('mosaicLayer').style.transform = transform;
+      }
+
+      $('split').addEventListener('input', applySplit);
+      $('viewZoom').addEventListener('input', applyViewZoom);
+      $('generate').addEventListener('click', generate);
+      $('regenerate').addEventListener('click', generate);
+      $('back').addEventListener('click', () => {
+        state.result = null;
+        state.cropped = null;
+        $('result').hidden = true;
+        $('download').hidden = true;
+        $('regenerate').hidden = true;
+        $('back').hidden = true;
+        $('cropStage').hidden = false;
+        $('cropTools').hidden = false;
+        $('generate').hidden = false;
+        setStage('processing', 0.5);
+        requestAnimationFrame(drawCrop);
+      });
+
+      /**
+       * Картинка для скачивания. На телефоне варианты рисуются в 1024 px,
+       * а PNG всё равно полноразмерный: сетка та же, дорисовать — дёшево.
+       */
+      function fullSizeCanvas(result) {
+        const cellSize = getCellSize(result.grid.cols, result.grid.rows, TARGET_OUTPUT_SIZE);
+        if (result.cellSize >= cellSize) return result.canvas;
+        return renderMosaicToCanvas(result.grid, { cellSize });
+      }
+
+      $('download').addEventListener('click', () => {
+        if (!state.result) return;
+        const canvas = fullSizeCanvas(state.result);
+        const name = `mosaic-${state.result.grid.cols}x${state.result.grid.rows}.png`;
+        if (LIGHT_DEVICE) {
+          // На телефоне картинка на экране сохраняется долгим нажатием в
+          // любом браузере; кнопка ниже отдаёт тот же PNG файлом.
+          $('pngImage').src = canvas.toDataURL('image/png');
+          $('pngOverlay').hidden = false;
+          state.pngFile = { canvas, name };
+          return;
+        }
+        canvas.toBlob((blob) => saveFile(blob, name), 'image/png');
+      });
+      $('pngSave').addEventListener('click', () => {
+        if (!state.pngFile) return;
+        state.pngFile.canvas.toBlob((blob) => saveFile(blob, state.pngFile.name), 'image/png');
+      });
+      $('pngClose').addEventListener('click', () => {
+        $('pngOverlay').hidden = true;
+        $('pngImage').removeAttribute('src');
+        state.pngFile = null;
+      });
+      $('pngOverlay').addEventListener('click', (event) => {
+        if (event.target === $('pngOverlay')) $('pngClose').click();
+      });
+
+      // для автотестов
+      window.__mosaic = state;
+    </script>
+  </body>
+</html>
