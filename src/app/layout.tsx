@@ -9,13 +9,13 @@ import './globals.css';
  * недоступности остаётся системный шрифт из того же стека.
  */
 const FONTS_URL =
-  'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
+  'https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700;800&family=Mulish:wght@400;500;600;700;800&display=swap';
 
 export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
-  title: 'Фотомозаика — картина из деталей по вашей фотографии',
+  title: 'Kubix — собери любое фото из деталей',
   description:
-    'Загрузите фотографию, выберите набор и получите мозаику из деталей: несколько вариантов обработки, инструкция по сборке и PDF.',
+    'Один набор — и любая фотография становится картиной для стены. Загрузи снимок, выбери вариант обработки и получи схему сборки по блокам и PDF.',
 };
 
 export const viewport: Viewport = {
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href={FONTS_URL} />
       </head>
-      <body className="min-h-screen grid-paper">{children}</body>
+      <body className="min-h-screen font-sans">{children}</body>
     </html>
   );
 }

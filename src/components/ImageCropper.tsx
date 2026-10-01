@@ -1,9 +1,7 @@
 'use client';
 
-import { Maximize2, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { CROP_MAX_ZOOM } from '@/config/mosaic';
 import { clamp } from '@/lib/utils';
@@ -22,9 +20,17 @@ interface ImageCropperProps {
   /** Пропорции рамки: cols / rows. */
   aspect: number;
   onCropChange?: (crop: CropRect) => void;
+  /**
+   * Кадр, с которого начать: когда кроппер открывают повторно, фото встаёт
+   * туда, где его оставили. Кадр других пропорций игнорируется.
+   */
+  initialCrop?: CropRect | null;
+  /** Предел масштаба. По умолчанию CROP_MAX_ZOOM. */
+  maxZoom?: number;
 }
 
 const FRAME_PADDING = 20;
+const FRAME_STROKE = 3;
 const EXPORT_MAX_SIZE = 2048;
 
 interface View {
@@ -34,13 +40,15 @@ interface View {
 }
 
 export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperProps>(
-  function ImageCropper({ image, aspect, onCropChange }, ref) {
+  function ImageCropper({ image, aspect, onCropChange, initialCrop, maxZoom = CROP_MAX_ZOOM }, ref) {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const [size, setSize] = React.useState({ width: 0, height: 0 });
     const [view, setView] = React.useState<View>({ zoom: 1, offsetX: 0, offsetY: 0 });
     const pointers = React.useRef(new Map<number, { x: number; y: number }>());
     const pinch = React.useRef<{ distance: number; zoom: number } | null>(null);
+    const initialCropRef = React.useRef(initialCrop);
+    initialCropRef.current = initialCrop;
 
     /* --- геометрия ------------------------------------------------------ */
 
@@ -68,7 +76,7 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
 
     const clampView = React.useCallback(
       (next: View): View => {
-        const zoom = clamp(next.zoom, 1, CROP_MAX_ZOOM);
+        const zoom = clamp(next.zoom, 1, maxZoom);
         const scale = minScale * zoom;
         const drawnWidth = image.width * scale;
         const drawnHeight = image.height * scale;
@@ -78,7 +86,7 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
           offsetY: clamp(next.offsetY, frame.y + frame.height - drawnHeight, frame.y),
         };
       },
-      [frame.x, frame.y, frame.width, frame.height, image.width, image.height, minScale],
+      [frame.x, frame.y, frame.width, frame.height, image.width, image.height, maxZoom, minScale],
     );
 
     const centerView = React.useCallback((): View => {
@@ -89,6 +97,19 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
         offsetY: frame.y + (frame.height - image.height * scale) / 2,
       };
     }, [frame.x, frame.y, frame.width, frame.height, image.width, image.height, minScale]);
+
+    /** Вид, при котором в рамке оказывается заданный кадр. */
+    const viewForCrop = React.useCallback(
+      (crop: CropRect): View => {
+        const scale = frame.width / crop.width;
+        return clampView({
+          zoom: scale / minScale,
+          offsetX: frame.x - crop.x * scale,
+          offsetY: frame.y - crop.y * scale,
+        });
+      },
+      [clampView, frame.x, frame.y, frame.width, minScale],
+    );
 
     const getCropRect = React.useCallback((): CropRect => {
       const scale = minScale * view.zoom;
@@ -115,10 +136,19 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
       return () => observer.disconnect();
     }, []);
 
-    // Новое фото или новые пропорции — центрируем заново.
+    // Новое фото или новые пропорции — центрируем заново, а если кадр уже
+    // выбирали раньше, возвращаемся к нему.
     React.useEffect(() => {
       if (!frame.width || !frame.height) return;
-      setView(centerView());
+      const saved = initialCropRef.current;
+      const fits =
+        saved &&
+        saved.width > 0 &&
+        saved.height > 0 &&
+        Math.abs(saved.width / saved.height - aspect) < 0.02 &&
+        saved.x + saved.width <= image.width + 1 &&
+        saved.y + saved.height <= image.height + 1;
+      setView(fits ? viewForCrop(saved) : centerView());
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [image.url, aspect, frame.width, frame.height]);
 
@@ -152,27 +182,22 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
       );
 
       // Затемняем всё, что не попадёт в кадр.
-      ctx.fillStyle = 'rgba(238, 239, 242, 0.82)';
+      ctx.fillStyle = 'rgba(20, 48, 47, 0.6)';
       ctx.beginPath();
       ctx.rect(0, 0, size.width, size.height);
       ctx.rect(frame.x, frame.y, frame.width, frame.height);
       ctx.fill('evenodd');
 
-      // Рамка и трети.
-      ctx.strokeStyle = 'rgba(16, 19, 24, 0.85)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(frame.x + 0.5, frame.y + 0.5, frame.width - 1, frame.height - 1);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-      ctx.beginPath();
-      for (let i = 1; i < 3; i++) {
-        const gx = Math.round(frame.x + (frame.width * i) / 3) + 0.5;
-        const gy = Math.round(frame.y + (frame.height * i) / 3) + 0.5;
-        ctx.moveTo(gx, frame.y);
-        ctx.lineTo(gx, frame.y + frame.height);
-        ctx.moveTo(frame.x, gy);
-        ctx.lineTo(frame.x + frame.width, gy);
-      }
-      ctx.stroke();
+      // Рамка кадра — акцентная, снаружи от картинки.
+      ctx.strokeStyle = '#C8471F';
+      ctx.lineWidth = FRAME_STROKE;
+      ctx.lineJoin = 'round';
+      ctx.strokeRect(
+        frame.x - FRAME_STROKE / 2,
+        frame.y - FRAME_STROKE / 2,
+        frame.width + FRAME_STROKE,
+        frame.height + FRAME_STROKE,
+      );
     }, [image, view, frame, minScale, size.width, size.height]);
 
     /* --- взаимодействие --------------------------------------------------- */
@@ -180,7 +205,7 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
     const zoomAt = React.useCallback(
       (nextZoom: number, anchorX: number, anchorY: number) => {
         setView((current) => {
-          const zoom = clamp(nextZoom, 1, CROP_MAX_ZOOM);
+          const zoom = clamp(nextZoom, 1, maxZoom);
           const ratio = zoom / current.zoom;
           return clampView({
             zoom,
@@ -296,21 +321,21 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
       [centerView, getCropRect, image.element],
     );
 
-    const crop = getCropRect();
+    const frameCenter: [number, number] = [frame.x + frame.width / 2, frame.y + frame.height / 2];
 
     return (
-      <div className="space-y-3">
+      <div className="flex flex-col gap-3.5">
         <div
           ref={containerRef}
-          className="checkerboard relative h-[320px] w-full overflow-hidden rounded-md border border-border sm:h-[420px]"
+          className="relative h-[340px] w-full overflow-hidden rounded-[20px] bg-border sm:h-[460px]"
         >
           <canvas
             ref={canvasRef}
             tabIndex={0}
             role="application"
-            aria-label="Кадрирование: перетаскивайте фото, колесо мыши меняет масштаб"
+            aria-label="Кадрирование: перетаскивай фото, колесо мыши меняет масштаб"
             style={{ width: size.width, height: size.height, touchAction: 'none' }}
-            className="cursor-grab outline-none focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
+            className="cursor-grab select-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring active:cursor-grabbing"
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
@@ -320,49 +345,21 @@ export const ImageCropper = React.forwardRef<ImageCropperHandle, ImageCropperPro
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Уменьшить"
-            onClick={() => zoomAt(view.zoom / 1.2, frame.x + frame.width / 2, frame.y + frame.height / 2)}
-          >
-            <Minus />
-          </Button>
-
+        <div className="flex items-center gap-3.5 rounded-[14px] bg-card px-4 py-2.5">
+          <span className="text-sm font-extrabold">Масштаб</span>
           <Slider
             value={[view.zoom]}
             min={1}
-            max={CROP_MAX_ZOOM}
+            max={maxZoom}
             step={0.01}
             aria-label="Масштаб"
-            className="min-w-[140px] flex-1"
-            onValueChange={([value]) =>
-              zoomAt(value, frame.x + frame.width / 2, frame.y + frame.height / 2)
-            }
+            className="min-w-[120px] flex-1"
+            onValueChange={([value]) => zoomAt(value, frameCenter[0], frameCenter[1])}
           />
-
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Увеличить"
-            onClick={() => zoomAt(view.zoom * 1.2, frame.x + frame.width / 2, frame.y + frame.height / 2)}
-          >
-            <Plus />
-          </Button>
-
-          <Button type="button" variant="outline" size="sm" onClick={() => setView(centerView())}>
-            <RotateCcw />
-            Вписать
-          </Button>
+          <span className="w-12 text-right text-sm font-extrabold tabular-nums" data-zoom-label>
+            {Math.round(view.zoom * 100)}%
+          </span>
         </div>
-
-        <p className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
-          <Maximize2 className="size-3" />
-          кадр {Math.round(crop.width)} × {Math.round(crop.height)} px · масштаб {view.zoom.toFixed(2)}×
-        </p>
       </div>
     );
   },

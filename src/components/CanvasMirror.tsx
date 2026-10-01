@@ -29,17 +29,26 @@ interface CanvasMirrorProps {
   source: HTMLCanvasElement | null;
   /** Для мозаики: не размывать ячейки при увеличении. */
   pixelated?: boolean;
+  /** Без шахматки и рамки — когда подложку задаёт родитель. */
+  bare?: boolean;
   className?: string;
+  canvasClassName?: string;
   label?: string;
 }
 
-export function CanvasMirror({ source, pixelated, className, label }: CanvasMirrorProps) {
+export function CanvasMirror({ source, pixelated, bare, className, canvasClassName, label }: CanvasMirrorProps) {
   const ref = useMirroredCanvas(source);
   return (
-    <div className={cn('checkerboard relative overflow-hidden rounded-md border border-border', className)}>
+    <div
+      className={cn(
+        'relative overflow-hidden',
+        !bare && 'checkerboard rounded-md border border-border',
+        className,
+      )}
+    >
       <canvas
         ref={ref}
-        className="block h-auto w-full"
+        className={cn('block h-auto w-full', canvasClassName)}
         style={pixelated ? { imageRendering: 'pixelated' } : undefined}
       />
       {label ? (

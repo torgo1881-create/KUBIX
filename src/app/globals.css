@@ -4,39 +4,52 @@
 
 @layer base {
   :root {
-    /* Палитра инструмента: холодная бумага, чернильный текст, один сигнальный синий.
-       Цвет в интерфейсе — редкость, потому что цвет здесь принадлежит фотографии. */
-    --background: 228 15% 94%; /* #EEEFF2 */
-    --foreground: 219 22% 8%; /* #101318 */
-    --card: 0 0% 100%;
-    --card-foreground: 219 22% 8%;
-    --primary: 228 79% 49%; /* #1B44E0 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 228 14% 89%;
-    --secondary-foreground: 219 22% 8%;
-    --muted: 228 14% 91%;
-    --muted-foreground: 219 8% 42%; /* #6E7480 */
-    --accent: 228 20% 90%;
-    --accent-foreground: 219 22% 8%;
-    --destructive: 3 72% 48%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 226 12% 86%; /* #D8DAE1 */
-    --input: 226 12% 86%;
-    --ring: 228 79% 49%;
-    --radius: 0.25rem;
+    /* Палитра Kubix: тёплая бумага, тёмно-зелёные чернила и один терракотовый акцент.
+       Значения — каналы RGB, чтобы работали модификаторы прозрачности (bg-primary/10). */
+    --background: 246 241 234; /* #F6F1EA */
+    --foreground: 20 48 47; /* #14302F */
+    --card: 255 255 255;
+    --card-foreground: 20 48 47;
+    --primary: 200 71 31; /* #C8471F */
+    --primary-hover: 169 58 23; /* #A93A17 */
+    --primary-foreground: 255 255 255;
+    --secondary: 237 229 217; /* #EDE5D9 */
+    --secondary-foreground: 20 48 47;
+    --muted: 237 229 217;
+    --muted-foreground: 79 101 99; /* #4F6563 */
+    --accent: 237 229 217;
+    --accent-foreground: 20 48 47;
+    --destructive: 211 43 34;
+    --destructive-foreground: 255 255 255;
+    --border: 226 217 204; /* #E2D9CC */
+    --input: 226 217 204;
+    --ring: 200 71 31;
+    --peach: 246 213 191; /* #F6D5BF */
+    --mint: 211 232 224; /* #D3E8E0 */
+    --on-ink: 201 214 211; /* #C9D6D3 — вторичный текст на тёмном */
+    --radius: 0.75rem;
   }
 
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: 'cv05' 1, 'ss01' 1;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  input[type='range'] {
+    accent-color: rgb(var(--primary));
   }
 
   ::selection {
-    background: hsl(var(--primary) / 0.18);
+    background: rgb(var(--primary) / 0.18);
   }
 }
 
@@ -44,18 +57,18 @@
   /* Сетка на фоне — тот же мотив, что и в результате работы приложения. */
   .grid-paper {
     background-image:
-      linear-gradient(to right, hsl(var(--foreground) / 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--foreground) / 0.045) 1px, transparent 1px);
+      linear-gradient(to right, rgb(var(--foreground) / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--foreground) / 0.045) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   /* Шахматка под прозрачными PNG. */
   .checkerboard {
     background-image:
-      linear-gradient(45deg, hsl(var(--muted)) 25%, transparent 25%),
-      linear-gradient(-45deg, hsl(var(--muted)) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, hsl(var(--muted)) 75%),
-      linear-gradient(-45deg, transparent 75%, hsl(var(--muted)) 75%);
+      linear-gradient(45deg, rgb(var(--muted)) 25%, transparent 25%),
+      linear-gradient(-45deg, rgb(var(--muted)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgb(var(--muted)) 75%),
+      linear-gradient(-45deg, transparent 75%, rgb(var(--muted)) 75%);
     background-size: 16px 16px;
     background-position: 0 0, 0 8px, 8px -8px, -8px 0;
   }
@@ -66,6 +79,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

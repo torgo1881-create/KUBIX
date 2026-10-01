@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, FileDown } from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -8,8 +7,7 @@ import {
   contrastInk,
   DEFAULT_BLOCK_SIZE,
 } from '@/algorithms/instruction/blockGenerator';
-import { CanvasMirror } from '@/components/CanvasMirror';
-import { Button } from '@/components/ui/button';
+import { MosaicView } from '@/components/MosaicView';
 import { buildFilename, saveBlob } from '@/lib/download';
 import {
   buildInstructionPdf,
@@ -30,6 +28,8 @@ interface BuildModeProps {
   modeLabel?: string;
   photoName?: string;
   qualityScore?: number | null;
+  /** Что собираем — строка слева в верхней панели: набор, размер, вариант. */
+  summary?: React.ReactNode;
 }
 
 const BLOCK_SIZES = [4, 8, 16];
@@ -46,6 +46,7 @@ export function BuildMode({
   modeLabel,
   photoName,
   qualityScore,
+  summary,
 }: BuildModeProps) {
   const [blockSize, setBlockSize] = React.useState(DEFAULT_BLOCK_SIZE);
   const [step, setStep] = React.useState(0);
@@ -102,13 +103,18 @@ export function BuildMode({
     }
   }, [modeLabel, original, paletteLabel, photoName, plan, qualityScore, result]);
 
+  const lastStep = plan.blocks.length - 1;
+
   return (
-    <div className="space-y-4" data-testid="build-mode">
-      {/* Управление */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="eyebrow">Блок</span>
-          <div className="flex rounded-md border border-border p-0.5">
+    <div className="flex flex-col gap-4" data-testid="build-mode">
+      {/* Сводка и управление */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-card px-[18px] py-3">
+        <span className="text-sm text-muted-foreground">
+          {summary ?? `${plan.cols}×${plan.rows} · ${formatNumber(plan.totalPieces)} деталей`}
+        </span>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex rounded-xl bg-background p-[3px]" role="group" aria-label="Размер блока">
             {BLOCK_SIZES.map((size) => (
               <button
                 key={size}
@@ -117,80 +123,89 @@ export function BuildMode({
                 aria-pressed={blockSize === size}
                 onClick={() => setBlockSize(size)}
                 className={cn(
-                  'rounded-[3px] px-2 py-1 font-mono text-xs transition-colors',
-                  blockSize === size ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
+                  'rounded-[9px] px-3 py-1.5 text-[13px] font-extrabold transition-colors',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  blockSize === size ? 'bg-ink text-background' : 'text-ink hover:bg-secondary',
                 )}
               >
                 {size}×{size}
               </button>
             ))}
           </div>
-        </div>
 
-        <Button variant="outline" size="sm" onClick={downloadPdf} disabled={pdfBusy}>
-          <FileDown />
-          {pdfBusy ? 'Собираю PDF…' : `Скачать PDF (${countInstructionPages(plan)} стр.)`}
-        </Button>
+          <button
+            type="button"
+            onClick={downloadPdf}
+            disabled={pdfBusy}
+            data-action="download-pdf"
+            className="rounded-xl bg-primary px-4 py-[9px] text-sm font-extrabold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60"
+          >
+            {pdfBusy ? 'Собираю PDF…' : `Скачать PDF · ${countInstructionPages(plan)} стр.`}
+          </button>
+        </div>
       </div>
 
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
+      <div className="flex flex-wrap items-start gap-4">
         {/* Схема блока */}
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-[2_1_440px] flex-col gap-3.5 rounded-3xl bg-card p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="block font-mono text-sm" data-step-label>
-                Шаг {step + 1} / {plan.blocks.length}
-              </span>
-              <span className="block text-[11px] text-muted-foreground">
-                {block.blockId} · строка {block.row + 1}, столбец {block.column + 1}
-              </span>
+              <div className="font-display text-2xl font-extrabold leading-tight" data-step-label>
+                Шаг {step + 1} из {plan.blocks.length}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Блок {String(block.index + 1).padStart(2, '0')} · строка {block.row + 1}, столбец {block.column + 1}
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
+            <div className="flex gap-2">
+              <button
+                type="button"
                 data-action="previous"
+                aria-label="Предыдущий блок"
                 onClick={() => setStep((current) => Math.max(0, current - 1))}
                 disabled={step === 0}
+                className="rounded-xl bg-background px-4 py-[11px] font-extrabold transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40"
               >
-                <ChevronLeft />
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
+                ←
+              </button>
+              <button
+                type="button"
                 data-action="next"
-                onClick={() => setStep((current) => Math.min(plan.blocks.length - 1, current + 1))}
-                disabled={step >= plan.blocks.length - 1}
+                onClick={() => setStep((current) => Math.min(lastStep, current + 1))}
+                disabled={step >= lastStep}
+                className="rounded-xl bg-ink px-[18px] py-[11px] font-extrabold text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-40"
               >
-                Next
-                <ChevronRight />
-              </Button>
+                Следующий блок →
+              </button>
             </div>
           </div>
 
           <div
-            className="h-1 w-full overflow-hidden rounded-full bg-secondary"
+            className="h-2 w-full overflow-hidden rounded-lg bg-background"
             role="progressbar"
             aria-valuemin={1}
             aria-valuemax={plan.blocks.length}
             aria-valuenow={step + 1}
           >
-            <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-primary transition-[width]" style={{ width: `${progress}%` }} />
           </div>
 
           {/* Увеличенная сетка блока */}
           <div
-            className="grid gap-[2px] rounded-md border border-border bg-border p-[2px]"
+            className="grid max-w-[640px] gap-[3px] rounded-[10px] bg-ink p-1.5"
             style={{ gridTemplateColumns: `repeat(${block.width}, minmax(0, 1fr))` }}
             data-block={block.blockId}
           >
             {block.cells.map((cell, index) => (
               <div
                 key={`${cell.x}-${cell.y}`}
-                className="flex aspect-square items-center justify-center font-mono text-[clamp(9px,2.2vw,16px)]"
+                className="flex aspect-square items-center justify-center rounded-[3px] text-[clamp(9px,1.6vw,15px)] font-extrabold"
                 style={{ background: cell.hex, color: contrastInk(cell.rgb) }}
                 title={`${cell.hex} · ячейка ${cell.x + 1}, ${cell.y + 1}`}
                 data-cell-number={block.numbers[index]}
@@ -201,33 +216,32 @@ export function BuildMode({
           </div>
 
           {/* Количества */}
-          <div className="space-y-1.5">
-            <span className="eyebrow">Деталей в блоке</span>
-            <ul className="flex flex-wrap gap-x-4 gap-y-1.5" data-block-counts>
-              {block.counts.map((count) => (
-                <li key={count.hex} className="flex items-center gap-1.5 text-[12px]">
-                  <span
-                    className="inline-block size-3.5 rounded-[2px] border border-border"
-                    style={{ background: count.hex }}
-                    aria-hidden
-                  />
-                  <span className="font-mono">{count.number}</span>
-                  <span>{count.name}</span>
-                  <span className="font-mono text-muted-foreground">×{count.count}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="flex flex-wrap gap-2" aria-label="Деталей в блоке" data-block-counts>
+            {block.counts.map((count) => (
+              <li
+                key={count.hex}
+                className="flex items-center gap-2 rounded-[10px] bg-background py-[5px] pl-[5px] pr-2.5 text-sm"
+              >
+                <span
+                  className="size-5 rounded-[5px] shadow-[inset_0_0_0_1px_rgba(0,0,0,.12)]"
+                  style={{ background: count.hex }}
+                  aria-hidden
+                />
+                <b>{count.number}</b>
+                <span>{count.name}</span>
+                <b className="text-primary">×{count.count}</b>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Общая картина и легенда */}
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <span className="eyebrow">Где мы находимся</span>
+        <aside className="flex flex-[1_1_240px] flex-col gap-4">
+          <div className="rounded-[20px] bg-ink p-2.5">
             <div className="relative overflow-hidden rounded-md">
-              <CanvasMirror source={result.canvas} pixelated />
+              <MosaicView grid={result.grid} aspect={plan.cols / plan.rows} label="Вся картина" />
               <div
-                className="pointer-events-none absolute border-2 border-primary shadow-[0_0_0_9999px_rgba(238,239,242,0.55)]"
+                className="pointer-events-none absolute border-[3px] border-primary shadow-[0_0_0_9999px_rgba(20,48,47,0.55)]"
                 data-highlight
                 style={{
                   left: `${(block.x / plan.cols) * 100}%`,
@@ -239,24 +253,21 @@ export function BuildMode({
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <span className="eyebrow">Легенда</span>
-            <ul className="space-y-1" data-legend>
-              {plan.legend.map((entry) => (
-                <li key={entry.hex} className="flex items-center gap-2 text-[12px]">
-                  <span className="w-4 shrink-0 font-mono text-muted-foreground">{entry.number}</span>
-                  <span
-                    className="inline-block size-3.5 shrink-0 rounded-[2px] border border-border"
-                    style={{ background: entry.hex }}
-                    aria-hidden
-                  />
-                  <span className="truncate">{entry.name}</span>
-                  <span className="ml-auto font-mono text-muted-foreground">{formatNumber(entry.total)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+          <ul className="flex flex-col gap-0.5 rounded-[20px] bg-card px-[18px] py-3.5" data-legend>
+            {plan.legend.map((entry) => (
+              <li key={entry.hex} className="flex items-center gap-2.5 py-[5px] text-sm">
+                <b className="w-4 shrink-0 text-muted-foreground">{entry.number}</b>
+                <span
+                  className="size-4 shrink-0 rounded shadow-[inset_0_0_0_1px_rgba(0,0,0,.12)]"
+                  style={{ background: entry.hex }}
+                  aria-hidden
+                />
+                <span className="truncate">{entry.name}</span>
+                <span className="ml-auto text-muted-foreground">{formatNumber(entry.total)}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </div>
     </div>
   );

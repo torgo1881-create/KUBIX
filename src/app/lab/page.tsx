@@ -544,22 +544,20 @@ export default function HomePage() {
             </Card>
 
             {result ? (
-              <Card>
-                <CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
-                  <CardTitle>Инструкция по сборке</CardTitle>
+              <section className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="text-base font-extrabold">Инструкция по сборке</h2>
                   <span className="eyebrow">Build mode</span>
-                </CardHeader>
-                <CardContent>
-                  <BuildMode
-                    result={result}
-                    original={cropped}
-                    palette={settings.paletteId ? getPalette(settings.paletteId) : null}
-                    paletteLabel={settings.paletteId ? getPaletteLabel(settings.paletteId) : undefined}
-                    modeLabel={getMode(result.mode).label}
-                    photoName={image.name}
-                  />
-                </CardContent>
-              </Card>
+                </div>
+                <BuildMode
+                  result={result}
+                  original={cropped}
+                  palette={settings.paletteId ? getPalette(settings.paletteId) : null}
+                  paletteLabel={settings.paletteId ? getPaletteLabel(settings.paletteId) : undefined}
+                  modeLabel={getMode(result.mode).label}
+                  photoName={image.name}
+                />
+              </section>
             ) : null}
 
             {result ? (

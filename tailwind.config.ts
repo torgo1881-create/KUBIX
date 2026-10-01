@@ -1,39 +1,47 @@
 import type { Config } from 'tailwindcss';
 
+const channel = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: ['class'],
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        border: channel('border'),
+        input: channel('input'),
+        ring: channel('ring'),
+        background: channel('background'),
+        foreground: channel('foreground'),
+        // Чернила: текст, тёмные блоки и подложки под мозаику.
+        ink: channel('foreground'),
+        'on-ink': channel('on-ink'),
+        peach: channel('peach'),
+        mint: channel('mint'),
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: channel('primary'),
+          hover: channel('primary-hover'),
+          foreground: channel('primary-foreground'),
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          DEFAULT: channel('secondary'),
+          foreground: channel('secondary-foreground'),
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: channel('muted'),
+          foreground: channel('muted-foreground'),
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: channel('accent'),
+          foreground: channel('accent-foreground'),
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: channel('destructive'),
+          foreground: channel('destructive-foreground'),
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: channel('card'),
+          foreground: channel('card-foreground'),
         },
       },
       borderRadius: {
@@ -42,8 +50,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['Mulish', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Montserrat Alternates"', 'Mulish', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       keyframes: {
         'stripe-shift': {
