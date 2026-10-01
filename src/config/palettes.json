@@ -1,0 +1,58 @@
+{
+  "classic": [
+    { "id": "classic-1", "name": "Classic 1 — чёрный", "hex": "#14161A", "rgb": [20, 22, 26], "availableQuantity": 3000 },
+    { "id": "classic-2", "name": "Classic 2 — тёмно-серый", "hex": "#4A4F57", "rgb": [74, 79, 87], "availableQuantity": 3000 },
+    { "id": "classic-3", "name": "Classic 3 — средне-серый", "hex": "#8A9098", "rgb": [138, 144, 152], "availableQuantity": 3000 },
+    { "id": "classic-4", "name": "Classic 4 — светло-серый", "hex": "#C3C7CC", "rgb": [195, 199, 204], "availableQuantity": 3000 },
+    { "id": "classic-5", "name": "Classic 5 — белый", "hex": "#F2F3F5", "rgb": [242, 243, 245], "availableQuantity": 3000 }
+  ],
+
+  "color": [
+    { "id": "color-a", "name": "Color A — светлый тёплый", "hex": "#F2D9C0", "rgb": [242, 217, 192], "availableQuantity": 3000 },
+    { "id": "color-b", "name": "Color B — средний тёплый", "hex": "#D9A87C", "rgb": [217, 168, 124], "availableQuantity": 3000 },
+    { "id": "color-c", "name": "Color C — глубокий тёплый", "hex": "#A9724B", "rgb": [169, 114, 75], "availableQuantity": 3000 },
+    { "id": "color-d", "name": "Color D — светлый нейтральный", "hex": "#E8E6E1", "rgb": [232, 230, 225], "availableQuantity": 3000 },
+    { "id": "color-e", "name": "Color E — средний холодный", "hex": "#7A7F86", "rgb": [122, 127, 134], "availableQuantity": 3000 },
+    { "id": "color-f", "name": "Color F — тёмный холодный", "hex": "#3B3F46", "rgb": [59, 63, 70], "availableQuantity": 3000 },
+    { "id": "color-base", "name": "Base — чёрная основа", "hex": "#14161A", "rgb": [20, 22, 26], "availableQuantity": 3000 }
+  ],
+
+  "basic": [
+    { "id": "black", "name": "Black", "hex": "#1B1B1B", "rgb": [27, 27, 27], "availableQuantity": 1200 },
+    { "id": "dark-grey", "name": "Dark Grey", "hex": "#6C6E68", "rgb": [108, 110, 104], "availableQuantity": 900 },
+    { "id": "light-grey", "name": "Light Grey", "hex": "#A3A2A4", "rgb": [163, 162, 164], "availableQuantity": 900 },
+    { "id": "white", "name": "White", "hex": "#F4F4F4", "rgb": [244, 244, 244], "availableQuantity": 1500 },
+    { "id": "red", "name": "Red", "hex": "#C4281B", "rgb": [196, 40, 27], "availableQuantity": 700 },
+    { "id": "dark-red", "name": "Dark Red", "hex": "#720E0F", "rgb": [114, 14, 15], "availableQuantity": 400 },
+    { "id": "orange", "name": "Orange", "hex": "#F57C20", "rgb": [245, 124, 32], "availableQuantity": 700 },
+    { "id": "yellow", "name": "Yellow", "hex": "#F5CD2F", "rgb": [245, 205, 47], "availableQuantity": 700 },
+    { "id": "green", "name": "Green", "hex": "#58AB41", "rgb": [88, 171, 65], "availableQuantity": 600 },
+    { "id": "dark-green", "name": "Dark Green", "hex": "#237841", "rgb": [35, 120, 65], "availableQuantity": 400 },
+    { "id": "blue", "name": "Blue", "hex": "#0055BF", "rgb": [0, 85, 191], "availableQuantity": 900 },
+    { "id": "brown", "name": "Brown", "hex": "#7C503A", "rgb": [124, 80, 58], "availableQuantity": 900 }
+  ],
+
+  "portrait": [
+    { "id": "skin-light", "name": "Skin Light", "hex": "#F2CDA7", "rgb": [242, 205, 167], "availableQuantity": 1200 },
+    { "id": "skin-medium", "name": "Skin Medium", "hex": "#D9A066", "rgb": [217, 160, 102], "availableQuantity": 1200 },
+    { "id": "skin-tan", "name": "Skin Tan", "hex": "#C08552", "rgb": [192, 133, 82], "availableQuantity": 900 },
+    { "id": "skin-deep", "name": "Skin Deep", "hex": "#8A5A3B", "rgb": [138, 90, 59], "availableQuantity": 700 },
+    { "id": "blush", "name": "Blush", "hex": "#C97B6E", "rgb": [201, 123, 110], "availableQuantity": 500 },
+    { "id": "hair-dark", "name": "Hair Dark", "hex": "#3B2A24", "rgb": [59, 42, 36], "availableQuantity": 900 },
+    { "id": "black", "name": "Black", "hex": "#1B1B1B", "rgb": [27, 27, 27], "availableQuantity": 900 },
+    { "id": "white", "name": "White", "hex": "#F4F4F4", "rgb": [244, 244, 244], "availableQuantity": 1200 },
+    { "id": "light-grey", "name": "Light Grey", "hex": "#A3A2A4", "rgb": [163, 162, 164], "availableQuantity": 700 },
+    { "id": "dark-grey", "name": "Dark Grey", "hex": "#6C6E68", "rgb": [108, 110, 104], "availableQuantity": 700 },
+    { "id": "red", "name": "Red", "hex": "#C4281B", "rgb": [196, 40, 27], "availableQuantity": 400 },
+    { "id": "blue", "name": "Blue", "hex": "#2A5CA5", "rgb": [42, 92, 165], "availableQuantity": 700 },
+    { "id": "green", "name": "Green", "hex": "#4E7A4A", "rgb": [78, 122, 74], "availableQuantity": 500 },
+    { "id": "sand", "name": "Sand", "hex": "#E8C36A", "rgb": [232, 195, 106], "availableQuantity": 600 }
+  ],
+
+  "grayscale": [
+    { "id": "gs-black", "name": "Black", "hex": "#000000", "rgb": [0, 0, 0], "availableQuantity": 1000 },
+    { "id": "gs-dark", "name": "Dark Grey", "hex": "#555555", "rgb": [85, 85, 85], "availableQuantity": 1000 },
+    { "id": "gs-mid", "name": "Grey", "hex": "#AAAAAA", "rgb": [170, 170, 170], "availableQuantity": 1000 },
+    { "id": "gs-white", "name": "White", "hex": "#FFFFFF", "rgb": [255, 255, 255], "availableQuantity": 1000 }
+  ]
+}

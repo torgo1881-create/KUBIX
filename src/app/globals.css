@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Палитра инструмента: холодная бумага, чернильный текст, один сигнальный синий.
+       Цвет в интерфейсе — редкость, потому что цвет здесь принадлежит фотографии. */
+    --background: 228 15% 94%; /* #EEEFF2 */
+    --foreground: 219 22% 8%; /* #101318 */
+    --card: 0 0% 100%;
+    --card-foreground: 219 22% 8%;
+    --primary: 228 79% 49%; /* #1B44E0 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 14% 89%;
+    --secondary-foreground: 219 22% 8%;
+    --muted: 228 14% 91%;
+    --muted-foreground: 219 8% 42%; /* #6E7480 */
+    --accent: 228 20% 90%;
+    --accent-foreground: 219 22% 8%;
+    --destructive: 3 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 226 12% 86%; /* #D8DAE1 */
+    --input: 226 12% 86%;
+    --ring: 228 79% 49%;
+    --radius: 0.25rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'cv05' 1, 'ss01' 1;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+  }
+}
+
+@layer components {
+  /* Сетка на фоне — тот же мотив, что и в результате работы приложения. */
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground) / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.045) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Шахматка под прозрачными PNG. */
+  .checkerboard {
+    background-image:
+      linear-gradient(45deg, hsl(var(--muted)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--muted)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--muted)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--muted)) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

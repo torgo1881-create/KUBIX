@@ -1,0 +1,32 @@
+{
+  "variants": [
+    {
+      "id": "T",
+      "name": "Автоподбор",
+      "description": "Настройки варианта «Светлое лицо + глаза», подобранные по бенчмарку из 73 кадров.",
+      "base": "I",
+      "settings": {
+        "faceExposure": true,
+        "levels": true,
+        "dithering": 0,
+        "toneBalance": 0.2,
+        "eyeBoost": {
+          "contrast": 1.1,
+          "darkBias": 0.45,
+          "radiusScale": 1.6,
+          "includeBrows": true
+        },
+        "contrast": 0.98,
+        "saturation": 0.86,
+        "sharpen": 0.45,
+        "smoothing": 0
+      },
+      "tunedAt": "2026-10-01",
+      "objective": {
+        "frames": 73,
+        "start": 0.7616,
+        "best": 0.7679
+      }
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+ "variant": "I",
+ "category": null,
+ "params": [
+  "faceExposure",
+  "levels",
+  "dithering",
+  "toneBalance",
+  "faceVolume",
+  "contrast",
+  "saturation",
+  "sharpen",
+  "smoothing",
+  "eyeBoost.contrast",
+  "eyeBoost.darkBias"
+ ],
+ "frames": {
+  "search": 24,
+  "total": 73
+ },
+ "budget": 60,
+ "evaluations": 18,
+ "durationSec": 126,
+ "start": {
+  "settings": {
+   "faceExposure": true,
+   "levels": true,
+   "dithering": 0,
+   "toneBalance": 0,
+   "eyeBoost": {
+    "contrast": 1.1,
+    "darkBias": 0.45,
+    "radiusScale": 1.6,
+    "includeBrows": true
+   },
+   "contrast": 1.08,
+   "saturation": 0.96,
+   "sharpen": 0.45,
+   "smoothing": 0
+  },
+  "search": {
+   "frames": 24,
+   "recognition": 0.7611249999999998,
+   "grain": 5.824999999999999,
+   "contrast": 1.1975,
+   "ssim": 0.8829583333333332,
+   "limits": true
+  },
+  "full": {
+   "frames": 73,
+   "recognition": 0.7615753424657535,
+   "grain": 5.613698630136986,
+   "contrast": 1.1991780821917808,
+   "ssim": 0.8731232876712332,
+   "limits": true
+  }
+ },
+ "best": {
+  "settings": {
+   "faceExposure": false,
+   "levels": false,
+   "dithering": 0,
+   "toneBalance": 0,
+   "eyeBoost": {
+    "contrast": 1.1,
+    "darkBias": 0.45,
+    "radiusScale": 1.6,
+    "includeBrows": true
+   },
+   "contrast": 1.08,
+   "saturation": 0.96,
+   "sharpen": 0.45,
+   "smoothing": 0
+  },
+  "search": {
+   "grain": 4.766666666666667,
+   "contrast": 1.1008333333333333,
+   "ssim": 0.9064166666666668,
+   "limits": true,
+   "recognition": 0.774375
+  },
+  "full": {
+   "frames": 73,
+   "recognition": 0.7721232876712328,
+   "grain": 4.62876712328767,
+   "contrast": 1.1009589041095893,
+   "ssim": 0.8954383561643834,
+   "limits": true
+  }
+ },
+ "steps": [
+  {
+   "round": 1,
+   "param": "faceExposure",
+   "from": 1,
+   "to": 0,
+   "objective": 0.7712083333333335
+  },
+  {
+   "round": 1,
+   "param": "levels",
+   "from": 1,
+   "to": 0,
+   "objective": 0.774375
+  }
+ ],
+ "changes": [
+  "подъём тёмного лица (faceExposure): да → нет",
+  "растяжение гистограммы (levels): да → нет"
+ ],
+ "confirmed": true
+}

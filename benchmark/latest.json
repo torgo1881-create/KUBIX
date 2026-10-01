@@ -1,0 +1,3618 @@
+{
+ "summary": {
+  "frames": 73,
+  "detected": 69,
+  "variants": {
+   "A": {
+    "recognition": 0.7747671232876713,
+    "grain": 4.347945205479449,
+    "contrast": 1.0864383561643831,
+    "limits": true
+   },
+   "B": {
+    "recognition": 0.7656712328767126,
+    "grain": 5.308219178082195,
+    "contrast": 1.1836986301369867,
+    "limits": true
+   },
+   "K": {
+    "recognition": 0.7563424657534247,
+    "grain": 6.36712328767123,
+    "contrast": 1.2506849315068491,
+    "limits": true
+   },
+   "I": {
+    "recognition": 0.7615753424657536,
+    "grain": 5.6136986301369864,
+    "contrast": 1.199178082191781,
+    "limits": true
+   },
+   "G": {
+    "recognition": 0.7067123287671231,
+    "grain": 11.245205479452055,
+    "contrast": 1.3842465753424653,
+    "limits": true
+   }
+  },
+  "date": "2026-10-01"
+ },
+ "results": {
+  "5DD333E3-2568-4189-AA12--classic-m": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.769,
+     "ssim": 0.904,
+     "grain": 3.1,
+     "contrast": 1.16,
+     "monolith": 81.82,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.777,
+     "ssim": 0.905,
+     "grain": 3.8,
+     "contrast": 1.25,
+     "monolith": 83.24,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.772,
+     "ssim": 0.893,
+     "grain": 4.6,
+     "contrast": 1.29,
+     "monolith": 77.78,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.771,
+     "ssim": 0.901,
+     "grain": 4.2,
+     "contrast": 1.26,
+     "monolith": 82.24,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.75,
+     "ssim": 0.825,
+     "grain": 8.1,
+     "contrast": 1.54,
+     "monolith": 70.25,
+     "limits": true
+    }
+   }
+  },
+  "5DD333E3-2568-4189-AA12--classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.746,
+     "ssim": 0.863,
+     "grain": 4.2,
+     "contrast": 1.2,
+     "monolith": 70.87,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.756,
+     "ssim": 0.877,
+     "grain": 4.1,
+     "contrast": 1.22,
+     "monolith": 73.97,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.755,
+     "ssim": 0.863,
+     "grain": 5.2,
+     "contrast": 1.29,
+     "monolith": 71,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.753,
+     "ssim": 0.871,
+     "grain": 4.4,
+     "contrast": 1.24,
+     "monolith": 75.88,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.728,
+     "ssim": 0.807,
+     "grain": 10.2,
+     "contrast": 1.61,
+     "monolith": 60.16,
+     "limits": true
+    }
+   }
+  },
+  "5DD333E3-2568-4189-AA12--color-m": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.899,
+     "grain": 3.3,
+     "contrast": 1.07,
+     "monolith": 85.53,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.779,
+     "ssim": 0.897,
+     "grain": 3.7,
+     "contrast": 1.12,
+     "monolith": 85.89,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.789,
+     "ssim": 0.904,
+     "grain": 4.3,
+     "contrast": 1.16,
+     "monolith": 82.13,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.777,
+     "ssim": 0.897,
+     "grain": 4,
+     "contrast": 1.13,
+     "monolith": 84.39,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.754,
+     "ssim": 0.838,
+     "grain": 8,
+     "contrast": 1.37,
+     "monolith": 63.64,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0089-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.81,
+     "ssim": 0.882,
+     "grain": 5.1,
+     "contrast": 1.35,
+     "monolith": 69.14,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.808,
+     "ssim": 0.876,
+     "grain": 5.8,
+     "contrast": 1.44,
+     "monolith": 70.38,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.818,
+     "ssim": 0.867,
+     "grain": 6.3,
+     "contrast": 1.57,
+     "monolith": 65.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.809,
+     "ssim": 0.875,
+     "grain": 6.1,
+     "contrast": 1.47,
+     "monolith": 69.99,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.716,
+     "ssim": 0.788,
+     "grain": 13.8,
+     "contrast": 1.99,
+     "monolith": 47.27,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0089-classic-s": {
+   "detection": {
+    "faces": 2,
+    "eyes": 4,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.906,
+     "grain": 7.4,
+     "contrast": 1.21,
+     "monolith": 65.16,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.771,
+     "ssim": 0.891,
+     "grain": 9.1,
+     "contrast": 1.33,
+     "monolith": 51.2,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.764,
+     "ssim": 0.877,
+     "grain": 10.3,
+     "contrast": 1.39,
+     "monolith": 44.43,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.771,
+     "ssim": 0.889,
+     "grain": 9.1,
+     "contrast": 1.34,
+     "monolith": 48.54,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.702,
+     "ssim": 0.768,
+     "grain": 19.6,
+     "contrast": 1.67,
+     "monolith": 30.3,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0089-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.793,
+     "ssim": 0.89,
+     "grain": 6.8,
+     "contrast": 1.16,
+     "monolith": 69.97,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.859,
+     "grain": 7.2,
+     "contrast": 1.27,
+     "monolith": 66.41,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.789,
+     "ssim": 0.855,
+     "grain": 7.9,
+     "contrast": 1.44,
+     "monolith": 63.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.774,
+     "ssim": 0.857,
+     "grain": 7.4,
+     "contrast": 1.31,
+     "monolith": 65.98,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.72,
+     "ssim": 0.787,
+     "grain": 17.2,
+     "contrast": 1.82,
+     "monolith": 44.06,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0089__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.793,
+     "ssim": 0.89,
+     "grain": 6.8,
+     "contrast": 1.16,
+     "monolith": 69.97,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.859,
+     "grain": 7.2,
+     "contrast": 1.27,
+     "monolith": 66.41,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.789,
+     "ssim": 0.855,
+     "grain": 7.9,
+     "contrast": 1.44,
+     "monolith": 63.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.774,
+     "ssim": 0.857,
+     "grain": 7.4,
+     "contrast": 1.31,
+     "monolith": 65.98,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.72,
+     "ssim": 0.787,
+     "grain": 17.2,
+     "contrast": 1.82,
+     "monolith": 44.06,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0442-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.786,
+     "ssim": 0.904,
+     "grain": 1,
+     "contrast": 1.1,
+     "monolith": 89.57,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.795,
+     "ssim": 0.848,
+     "grain": 2.2,
+     "contrast": 1.36,
+     "monolith": 80.7,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.768,
+     "ssim": 0.816,
+     "grain": 3.6,
+     "contrast": 1.39,
+     "monolith": 79.25,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.795,
+     "ssim": 0.848,
+     "grain": 2.2,
+     "contrast": 1.36,
+     "monolith": 80.7,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.738,
+     "ssim": 0.776,
+     "grain": 6.7,
+     "contrast": 1.46,
+     "monolith": 74.12,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0442-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.791,
+     "ssim": 0.929,
+     "grain": 1.5,
+     "contrast": 1.07,
+     "monolith": 88.04,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.8,
+     "ssim": 0.881,
+     "grain": 3,
+     "contrast": 1.33,
+     "monolith": 79.39,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.767,
+     "ssim": 0.841,
+     "grain": 4.8,
+     "contrast": 1.36,
+     "monolith": 75.71,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.8,
+     "ssim": 0.881,
+     "grain": 3,
+     "contrast": 1.33,
+     "monolith": 79.39,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.72,
+     "ssim": 0.79,
+     "grain": 8.8,
+     "contrast": 1.42,
+     "monolith": 68.95,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0442-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.764,
+     "ssim": 0.869,
+     "grain": 1.9,
+     "contrast": 1.1,
+     "monolith": 81.56,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.768,
+     "ssim": 0.864,
+     "grain": 3.2,
+     "contrast": 1.23,
+     "monolith": 79.07,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.744,
+     "ssim": 0.838,
+     "grain": 5.2,
+     "contrast": 1.27,
+     "monolith": 76.61,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.762,
+     "ssim": 0.859,
+     "grain": 3.5,
+     "contrast": 1.24,
+     "monolith": 78.71,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.714,
+     "ssim": 0.803,
+     "grain": 8,
+     "contrast": 1.33,
+     "monolith": 69.27,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0443-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.791,
+     "ssim": 0.906,
+     "grain": 1.1,
+     "contrast": 1.09,
+     "monolith": 86.65,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.804,
+     "ssim": 0.865,
+     "grain": 2,
+     "contrast": 1.31,
+     "monolith": 80.68,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.784,
+     "ssim": 0.836,
+     "grain": 3.5,
+     "contrast": 1.35,
+     "monolith": 73.01,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.797,
+     "ssim": 0.86,
+     "grain": 2.3,
+     "contrast": 1.32,
+     "monolith": 79.1,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.736,
+     "ssim": 0.798,
+     "grain": 7.7,
+     "contrast": 1.43,
+     "monolith": 70.43,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0443-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.804,
+     "ssim": 0.937,
+     "grain": 1.4,
+     "contrast": 1.07,
+     "monolith": 86.72,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.811,
+     "ssim": 0.903,
+     "grain": 2.8,
+     "contrast": 1.3,
+     "monolith": 78.98,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.788,
+     "ssim": 0.866,
+     "grain": 4.2,
+     "contrast": 1.32,
+     "monolith": 70.87,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.806,
+     "ssim": 0.896,
+     "grain": 2.9,
+     "contrast": 1.3,
+     "monolith": 77.95,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.726,
+     "ssim": 0.813,
+     "grain": 9,
+     "contrast": 1.38,
+     "monolith": 68.6,
+     "limits": true
+    }
+   }
+  },
+  "IMG_0443-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.787,
+     "ssim": 0.902,
+     "grain": 1.9,
+     "contrast": 1.12,
+     "monolith": 81.48,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.771,
+     "ssim": 0.893,
+     "grain": 3.4,
+     "contrast": 1.21,
+     "monolith": 80.06,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.759,
+     "ssim": 0.874,
+     "grain": 4.8,
+     "contrast": 1.24,
+     "monolith": 76.27,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.768,
+     "ssim": 0.888,
+     "grain": 3.6,
+     "contrast": 1.22,
+     "monolith": 80.58,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.711,
+     "ssim": 0.828,
+     "grain": 9.2,
+     "contrast": 1.33,
+     "monolith": 69.04,
+     "limits": true
+    }
+   }
+  },
+  "IMG_2846__1_-color-m": {
+   "detection": {
+    "faces": 3,
+    "eyes": 5,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.814,
+     "ssim": 0.916,
+     "grain": 3.8,
+     "contrast": 1.08,
+     "monolith": 75.08,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.806,
+     "ssim": 0.887,
+     "grain": 4.2,
+     "contrast": 1.24,
+     "monolith": 74.72,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.793,
+     "ssim": 0.879,
+     "grain": 5.8,
+     "contrast": 1.29,
+     "monolith": 72.51,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.799,
+     "ssim": 0.882,
+     "grain": 4.8,
+     "contrast": 1.26,
+     "monolith": 74.38,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.742,
+     "ssim": 0.832,
+     "grain": 10.9,
+     "contrast": 1.4,
+     "monolith": 53.32,
+     "limits": true
+    }
+   }
+  },
+  "IMG_3290__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.72,
+     "ssim": 0.742,
+     "grain": 2,
+     "contrast": 1.03,
+     "monolith": 90.06,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.683,
+     "ssim": 0.67,
+     "grain": 3.3,
+     "contrast": 1.11,
+     "monolith": 86.17,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.696,
+     "ssim": 0.669,
+     "grain": 3.6,
+     "contrast": 1.2,
+     "monolith": 81.45,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.681,
+     "ssim": 0.668,
+     "grain": 3.4,
+     "contrast": 1.11,
+     "monolith": 84.93,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.671,
+     "ssim": 0.563,
+     "grain": 6.6,
+     "contrast": 1.48,
+     "monolith": 75.28,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5040-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.792,
+     "ssim": 0.979,
+     "grain": 7.3,
+     "contrast": 1.12,
+     "monolith": 52.73,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.747,
+     "ssim": 0.941,
+     "grain": 9.7,
+     "contrast": 1.17,
+     "monolith": 52.47,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.758,
+     "ssim": 0.935,
+     "grain": 9.9,
+     "contrast": 1.27,
+     "monolith": 51.17,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.746,
+     "ssim": 0.94,
+     "grain": 9.9,
+     "contrast": 1.18,
+     "monolith": 52.52,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.73,
+     "ssim": 0.885,
+     "grain": 13.7,
+     "contrast": 1.41,
+     "monolith": 47.69,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5040-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.776,
+     "ssim": 0.985,
+     "grain": 8.2,
+     "contrast": 1.11,
+     "monolith": 55.47,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.738,
+     "ssim": 0.952,
+     "grain": 11.3,
+     "contrast": 1.19,
+     "monolith": 45.17,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.74,
+     "ssim": 0.947,
+     "grain": 11.9,
+     "contrast": 1.26,
+     "monolith": 48.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.734,
+     "ssim": 0.951,
+     "grain": 11.8,
+     "contrast": 1.2,
+     "monolith": 45.12,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.729,
+     "ssim": 0.902,
+     "grain": 14.5,
+     "contrast": 1.42,
+     "monolith": 44.07,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5040-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.753,
+     "ssim": 0.965,
+     "grain": 9,
+     "contrast": 1.02,
+     "monolith": 47.85,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.722,
+     "ssim": 0.936,
+     "grain": 10.4,
+     "contrast": 1.04,
+     "monolith": 49.63,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.722,
+     "ssim": 0.928,
+     "grain": 11.4,
+     "contrast": 1.09,
+     "monolith": 45.3,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.715,
+     "ssim": 0.935,
+     "grain": 11.3,
+     "contrast": 1.05,
+     "monolith": 48.19,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.687,
+     "ssim": 0.893,
+     "grain": 16,
+     "contrast": 1.16,
+     "monolith": 36.78,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5040__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.753,
+     "ssim": 0.965,
+     "grain": 9,
+     "contrast": 1.02,
+     "monolith": 47.85,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.722,
+     "ssim": 0.936,
+     "grain": 10.4,
+     "contrast": 1.04,
+     "monolith": 49.63,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.722,
+     "ssim": 0.928,
+     "grain": 11.4,
+     "contrast": 1.09,
+     "monolith": 45.3,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.715,
+     "ssim": 0.935,
+     "grain": 11.3,
+     "contrast": 1.05,
+     "monolith": 48.19,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.687,
+     "ssim": 0.893,
+     "grain": 16,
+     "contrast": 1.16,
+     "monolith": 36.78,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5042-classic-m": {
+   "detection": {
+    "faces": 3,
+    "eyes": 6,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.778,
+     "ssim": 0.974,
+     "grain": 6.4,
+     "contrast": 1.11,
+     "monolith": 56.35,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.746,
+     "ssim": 0.936,
+     "grain": 8.5,
+     "contrast": 1.22,
+     "monolith": 52.64,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.74,
+     "ssim": 0.917,
+     "grain": 9.5,
+     "contrast": 1.29,
+     "monolith": 43.57,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.741,
+     "ssim": 0.928,
+     "grain": 9,
+     "contrast": 1.25,
+     "monolith": 49.02,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.705,
+     "ssim": 0.873,
+     "grain": 15.3,
+     "contrast": 1.44,
+     "monolith": 33.45,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5042-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.773,
+     "ssim": 0.977,
+     "grain": 7.3,
+     "contrast": 1.1,
+     "monolith": 49.73,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.736,
+     "ssim": 0.943,
+     "grain": 9.8,
+     "contrast": 1.19,
+     "monolith": 45.14,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.729,
+     "ssim": 0.919,
+     "grain": 11.3,
+     "contrast": 1.28,
+     "monolith": 37.35,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.735,
+     "ssim": 0.937,
+     "grain": 10,
+     "contrast": 1.21,
+     "monolith": 44.95,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.701,
+     "ssim": 0.879,
+     "grain": 16.1,
+     "contrast": 1.4,
+     "monolith": 30.98,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5042-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.745,
+     "ssim": 0.96,
+     "grain": 8.2,
+     "contrast": 1.08,
+     "monolith": 54.28,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.724,
+     "ssim": 0.947,
+     "grain": 9.8,
+     "contrast": 1.1,
+     "monolith": 50.23,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.726,
+     "ssim": 0.927,
+     "grain": 10.7,
+     "contrast": 1.18,
+     "monolith": 42.97,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.724,
+     "ssim": 0.943,
+     "grain": 10.1,
+     "contrast": 1.12,
+     "monolith": 49.12,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.692,
+     "ssim": 0.894,
+     "grain": 17.5,
+     "contrast": 1.28,
+     "monolith": 29.49,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5042__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.745,
+     "ssim": 0.96,
+     "grain": 8.2,
+     "contrast": 1.08,
+     "monolith": 54.28,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.724,
+     "ssim": 0.947,
+     "grain": 9.8,
+     "contrast": 1.1,
+     "monolith": 50.23,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.726,
+     "ssim": 0.927,
+     "grain": 10.7,
+     "contrast": 1.18,
+     "monolith": 42.97,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.724,
+     "ssim": 0.943,
+     "grain": 10.1,
+     "contrast": 1.12,
+     "monolith": 49.12,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.692,
+     "ssim": 0.894,
+     "grain": 17.5,
+     "contrast": 1.28,
+     "monolith": 29.49,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5731-classic-m": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.768,
+     "ssim": 0.874,
+     "grain": 4.5,
+     "contrast": 1.09,
+     "monolith": 71.52,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.785,
+     "ssim": 0.905,
+     "grain": 5.3,
+     "contrast": 1.19,
+     "monolith": 70.1,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.779,
+     "ssim": 0.893,
+     "grain": 5.8,
+     "contrast": 1.23,
+     "monolith": 68.55,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.785,
+     "ssim": 0.904,
+     "grain": 5.5,
+     "contrast": 1.2,
+     "monolith": 70.95,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.706,
+     "ssim": 0.801,
+     "grain": 10.7,
+     "contrast": 1.32,
+     "monolith": 62.4,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5731-classic-s": {
+   "detection": {
+    "faces": 3,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.805,
+     "ssim": 0.963,
+     "grain": 4.3,
+     "contrast": 1.1,
+     "monolith": 68.99,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.788,
+     "ssim": 0.926,
+     "grain": 6.3,
+     "contrast": 1.25,
+     "monolith": 64.21,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.777,
+     "ssim": 0.914,
+     "grain": 7.1,
+     "contrast": 1.29,
+     "monolith": 61.6,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.784,
+     "ssim": 0.922,
+     "grain": 6.5,
+     "contrast": 1.26,
+     "monolith": 64.26,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.715,
+     "ssim": 0.818,
+     "grain": 11.5,
+     "contrast": 1.42,
+     "monolith": 55.2,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5731-color-m": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.738,
+     "ssim": 0.802,
+     "grain": 4.8,
+     "contrast": 1.01,
+     "monolith": 66.88,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.886,
+     "grain": 6,
+     "contrast": 1.07,
+     "monolith": 64.57,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.756,
+     "ssim": 0.866,
+     "grain": 7.2,
+     "contrast": 1.11,
+     "monolith": 58.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.769,
+     "ssim": 0.882,
+     "grain": 6.4,
+     "contrast": 1.08,
+     "monolith": 63.96,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.679,
+     "ssim": 0.794,
+     "grain": 12.5,
+     "contrast": 1.2,
+     "monolith": 48.65,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5731__1_-color-m": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.738,
+     "ssim": 0.802,
+     "grain": 4.8,
+     "contrast": 1.01,
+     "monolith": 66.88,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.886,
+     "grain": 6,
+     "contrast": 1.07,
+     "monolith": 64.57,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.756,
+     "ssim": 0.866,
+     "grain": 7.2,
+     "contrast": 1.11,
+     "monolith": 58.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.769,
+     "ssim": 0.882,
+     "grain": 6.4,
+     "contrast": 1.08,
+     "monolith": 63.96,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.679,
+     "ssim": 0.794,
+     "grain": 12.5,
+     "contrast": 1.2,
+     "monolith": 48.65,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5904-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.814,
+     "ssim": 0.817,
+     "grain": 2,
+     "contrast": 1.4,
+     "monolith": 78.47,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.823,
+     "ssim": 0.8,
+     "grain": 2.7,
+     "contrast": 1.69,
+     "monolith": 68.77,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.799,
+     "ssim": 0.764,
+     "grain": 3.7,
+     "contrast": 1.79,
+     "monolith": 65.82,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.817,
+     "ssim": 0.792,
+     "grain": 2.9,
+     "contrast": 1.71,
+     "monolith": 67.81,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.711,
+     "ssim": 0.675,
+     "grain": 8.4,
+     "contrast": 2.01,
+     "monolith": 52.77,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5904-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.795,
+     "ssim": 0.802,
+     "grain": 2.2,
+     "contrast": 1.38,
+     "monolith": 79,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.827,
+     "ssim": 0.816,
+     "grain": 2.7,
+     "contrast": 1.69,
+     "monolith": 75.32,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.801,
+     "ssim": 0.774,
+     "grain": 3.7,
+     "contrast": 1.78,
+     "monolith": 62.65,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.817,
+     "ssim": 0.803,
+     "grain": 3.1,
+     "contrast": 1.71,
+     "monolith": 71.39,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.706,
+     "ssim": 0.689,
+     "grain": 9.5,
+     "contrast": 1.99,
+     "monolith": 52.76,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5904-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.812,
+     "ssim": 0.859,
+     "grain": 2.6,
+     "contrast": 1.23,
+     "monolith": 78.27,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.805,
+     "ssim": 0.807,
+     "grain": 4.5,
+     "contrast": 1.56,
+     "monolith": 62.81,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.785,
+     "ssim": 0.77,
+     "grain": 5.8,
+     "contrast": 1.66,
+     "monolith": 59.52,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.803,
+     "ssim": 0.798,
+     "grain": 4.6,
+     "contrast": 1.58,
+     "monolith": 61.02,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.712,
+     "ssim": 0.711,
+     "grain": 10.9,
+     "contrast": 1.8,
+     "monolith": 49.97,
+     "limits": true
+    }
+   }
+  },
+  "IMG_5904__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.812,
+     "ssim": 0.859,
+     "grain": 2.6,
+     "contrast": 1.23,
+     "monolith": 78.27,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.805,
+     "ssim": 0.807,
+     "grain": 4.5,
+     "contrast": 1.56,
+     "monolith": 62.81,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.785,
+     "ssim": 0.77,
+     "grain": 5.8,
+     "contrast": 1.66,
+     "monolith": 59.52,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.803,
+     "ssim": 0.798,
+     "grain": 4.6,
+     "contrast": 1.58,
+     "monolith": 61.02,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.712,
+     "ssim": 0.711,
+     "grain": 10.9,
+     "contrast": 1.8,
+     "monolith": 49.97,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6106-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.778,
+     "ssim": 0.902,
+     "grain": 2.1,
+     "contrast": 1.06,
+     "monolith": 84.8,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.787,
+     "ssim": 0.896,
+     "grain": 1.9,
+     "contrast": 1.11,
+     "monolith": 83.74,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.769,
+     "ssim": 0.869,
+     "grain": 2.8,
+     "contrast": 1.16,
+     "monolith": 78.94,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.78,
+     "ssim": 0.884,
+     "grain": 2,
+     "contrast": 1.12,
+     "monolith": 82.76,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.731,
+     "ssim": 0.84,
+     "grain": 6.6,
+     "contrast": 1.19,
+     "monolith": 71.76,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6106-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.783,
+     "ssim": 0.9,
+     "grain": 2,
+     "contrast": 1.13,
+     "monolith": 85.6,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.786,
+     "ssim": 0.891,
+     "grain": 2,
+     "contrast": 1.18,
+     "monolith": 82.86,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.776,
+     "ssim": 0.862,
+     "grain": 2.4,
+     "contrast": 1.24,
+     "monolith": 79.1,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.775,
+     "ssim": 0.874,
+     "grain": 2.4,
+     "contrast": 1.2,
+     "monolith": 81.47,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.739,
+     "ssim": 0.824,
+     "grain": 6,
+     "contrast": 1.3,
+     "monolith": 73.73,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6106-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.748,
+     "ssim": 0.865,
+     "grain": 2.7,
+     "contrast": 0.94,
+     "monolith": 83.71,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.744,
+     "ssim": 0.851,
+     "grain": 4,
+     "contrast": 0.99,
+     "monolith": 78.96,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.733,
+     "ssim": 0.829,
+     "grain": 4.4,
+     "contrast": 1.03,
+     "monolith": 80.08,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.732,
+     "ssim": 0.842,
+     "grain": 4.2,
+     "contrast": 0.99,
+     "monolith": 78.34,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.711,
+     "ssim": 0.809,
+     "grain": 7.3,
+     "contrast": 1.07,
+     "monolith": 70.87,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6106__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.748,
+     "ssim": 0.865,
+     "grain": 2.7,
+     "contrast": 0.94,
+     "monolith": 83.71,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.744,
+     "ssim": 0.851,
+     "grain": 4,
+     "contrast": 0.99,
+     "monolith": 78.96,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.733,
+     "ssim": 0.829,
+     "grain": 4.4,
+     "contrast": 1.03,
+     "monolith": 80.08,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.732,
+     "ssim": 0.842,
+     "grain": 4.2,
+     "contrast": 0.99,
+     "monolith": 78.34,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.711,
+     "ssim": 0.809,
+     "grain": 7.3,
+     "contrast": 1.07,
+     "monolith": 70.87,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6132-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.78,
+     "ssim": 0.884,
+     "grain": 6.6,
+     "contrast": 1.33,
+     "monolith": 65.23,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.792,
+     "ssim": 0.89,
+     "grain": 6.8,
+     "contrast": 1.43,
+     "monolith": 62.37,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.779,
+     "ssim": 0.878,
+     "grain": 7.8,
+     "contrast": 1.49,
+     "monolith": 61.83,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.785,
+     "ssim": 0.887,
+     "grain": 7.2,
+     "contrast": 1.45,
+     "monolith": 62.58,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.695,
+     "ssim": 0.798,
+     "grain": 15.4,
+     "contrast": 1.57,
+     "monolith": 51.69,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6132-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.756,
+     "ssim": 0.838,
+     "grain": 7.2,
+     "contrast": 1.42,
+     "monolith": 56.42,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.755,
+     "ssim": 0.843,
+     "grain": 8.9,
+     "contrast": 1.52,
+     "monolith": 52.73,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.742,
+     "ssim": 0.825,
+     "grain": 9.9,
+     "contrast": 1.61,
+     "monolith": 49.1,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.752,
+     "ssim": 0.84,
+     "grain": 9.3,
+     "contrast": 1.55,
+     "monolith": 52.54,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.664,
+     "ssim": 0.739,
+     "grain": 18.3,
+     "contrast": 1.73,
+     "monolith": 47.51,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6132-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.877,
+     "grain": 5.5,
+     "contrast": 1.17,
+     "monolith": 73.26,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.776,
+     "ssim": 0.881,
+     "grain": 7.2,
+     "contrast": 1.28,
+     "monolith": 65.36,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.773,
+     "ssim": 0.862,
+     "grain": 7.6,
+     "contrast": 1.37,
+     "monolith": 61.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.878,
+     "grain": 7.4,
+     "contrast": 1.32,
+     "monolith": 64.21,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.706,
+     "ssim": 0.797,
+     "grain": 14.1,
+     "contrast": 1.53,
+     "monolith": 46.45,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6132__2_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.877,
+     "grain": 5.5,
+     "contrast": 1.17,
+     "monolith": 73.26,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.776,
+     "ssim": 0.881,
+     "grain": 7.2,
+     "contrast": 1.28,
+     "monolith": 65.36,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.773,
+     "ssim": 0.862,
+     "grain": 7.6,
+     "contrast": 1.37,
+     "monolith": 61.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.878,
+     "grain": 7.4,
+     "contrast": 1.32,
+     "monolith": 64.21,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.706,
+     "ssim": 0.797,
+     "grain": 14.1,
+     "contrast": 1.53,
+     "monolith": 46.45,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6149-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.808,
+     "ssim": 0.958,
+     "grain": 4.5,
+     "contrast": 1.1,
+     "monolith": 73.96,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.809,
+     "ssim": 0.947,
+     "grain": 4.9,
+     "contrast": 1.18,
+     "monolith": 69.29,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.797,
+     "ssim": 0.928,
+     "grain": 6.1,
+     "contrast": 1.24,
+     "monolith": 65.35,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.805,
+     "ssim": 0.942,
+     "grain": 5.2,
+     "contrast": 1.19,
+     "monolith": 68.52,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.735,
+     "ssim": 0.875,
+     "grain": 12.9,
+     "contrast": 1.41,
+     "monolith": 54.23,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6149-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.79,
+     "ssim": 0.952,
+     "grain": 6.2,
+     "contrast": 1.11,
+     "monolith": 64.99,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.796,
+     "ssim": 0.944,
+     "grain": 6.8,
+     "contrast": 1.2,
+     "monolith": 67.02,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.778,
+     "ssim": 0.921,
+     "grain": 8.3,
+     "contrast": 1.27,
+     "monolith": 57.64,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.789,
+     "ssim": 0.937,
+     "grain": 7.4,
+     "contrast": 1.22,
+     "monolith": 65.7,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.72,
+     "ssim": 0.862,
+     "grain": 14.5,
+     "contrast": 1.47,
+     "monolith": 48.54,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6149-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.793,
+     "ssim": 0.946,
+     "grain": 6.2,
+     "contrast": 1.08,
+     "monolith": 73.88,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.787,
+     "ssim": 0.939,
+     "grain": 6.5,
+     "contrast": 1.11,
+     "monolith": 69.82,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.778,
+     "ssim": 0.922,
+     "grain": 7.8,
+     "contrast": 1.17,
+     "monolith": 66.44,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.778,
+     "ssim": 0.932,
+     "grain": 7.1,
+     "contrast": 1.13,
+     "monolith": 66.65,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.727,
+     "ssim": 0.89,
+     "grain": 13.1,
+     "contrast": 1.27,
+     "monolith": 53.71,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6149__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.793,
+     "ssim": 0.946,
+     "grain": 6.2,
+     "contrast": 1.08,
+     "monolith": 73.88,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.787,
+     "ssim": 0.939,
+     "grain": 6.5,
+     "contrast": 1.11,
+     "monolith": 69.82,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.778,
+     "ssim": 0.922,
+     "grain": 7.8,
+     "contrast": 1.17,
+     "monolith": 66.44,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.778,
+     "ssim": 0.932,
+     "grain": 7.1,
+     "contrast": 1.13,
+     "monolith": 66.65,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.727,
+     "ssim": 0.89,
+     "grain": 13.1,
+     "contrast": 1.27,
+     "monolith": 53.71,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6449-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.787,
+     "ssim": 0.929,
+     "grain": 2.4,
+     "contrast": 1.06,
+     "monolith": 81.28,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.751,
+     "ssim": 0.887,
+     "grain": 2.8,
+     "contrast": 1.13,
+     "monolith": 84.62,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.733,
+     "ssim": 0.846,
+     "grain": 3.2,
+     "contrast": 1.17,
+     "monolith": 80.91,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.737,
+     "ssim": 0.872,
+     "grain": 3.1,
+     "contrast": 1.13,
+     "monolith": 82.31,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.688,
+     "ssim": 0.808,
+     "grain": 7.4,
+     "contrast": 1.19,
+     "monolith": 65.12,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6449-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.794,
+     "ssim": 0.945,
+     "grain": 2.6,
+     "contrast": 1.08,
+     "monolith": 79.17,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.739,
+     "ssim": 0.878,
+     "grain": 3.3,
+     "contrast": 1.15,
+     "monolith": 73.85,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.718,
+     "ssim": 0.837,
+     "grain": 4.5,
+     "contrast": 1.2,
+     "monolith": 71.44,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.725,
+     "ssim": 0.86,
+     "grain": 4,
+     "contrast": 1.16,
+     "monolith": 74.56,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.671,
+     "ssim": 0.81,
+     "grain": 9.4,
+     "contrast": 1.24,
+     "monolith": 67.33,
+     "limits": true
+    }
+   }
+  },
+  "IMG_6449-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.901,
+     "grain": 3.4,
+     "contrast": 1.07,
+     "monolith": 74.58,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.694,
+     "ssim": 0.81,
+     "grain": 4.9,
+     "contrast": 1.08,
+     "monolith": 76.25,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.681,
+     "ssim": 0.787,
+     "grain": 5.9,
+     "contrast": 1.12,
+     "monolith": 73.89,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.688,
+     "ssim": 0.801,
+     "grain": 5,
+     "contrast": 1.09,
+     "monolith": 73.83,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.655,
+     "ssim": 0.78,
+     "grain": 9.2,
+     "contrast": 1.14,
+     "monolith": 68.78,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7458-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.776,
+     "ssim": 0.867,
+     "grain": 3.9,
+     "contrast": 1.11,
+     "monolith": 75.08,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.77,
+     "ssim": 0.846,
+     "grain": 4,
+     "contrast": 1.15,
+     "monolith": 76.6,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.76,
+     "ssim": 0.821,
+     "grain": 5.2,
+     "contrast": 1.25,
+     "monolith": 64.57,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.77,
+     "ssim": 0.846,
+     "grain": 4,
+     "contrast": 1.15,
+     "monolith": 76.6,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.725,
+     "ssim": 0.789,
+     "grain": 10,
+     "contrast": 1.41,
+     "monolith": 49.95,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7458-classic-s": {
+   "detection": {
+    "faces": 2,
+    "eyes": 3,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.785,
+     "ssim": 0.915,
+     "grain": 4.2,
+     "contrast": 1.09,
+     "monolith": 75.49,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.764,
+     "ssim": 0.908,
+     "grain": 4.6,
+     "contrast": 1.09,
+     "monolith": 70.31,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.754,
+     "ssim": 0.893,
+     "grain": 6.3,
+     "contrast": 1.15,
+     "monolith": 61.25,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.75,
+     "ssim": 0.896,
+     "grain": 5.9,
+     "contrast": 1.12,
+     "monolith": 68.33,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.71,
+     "ssim": 0.844,
+     "grain": 11.9,
+     "contrast": 1.35,
+     "monolith": 55.79,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7458-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.778,
+     "ssim": 0.875,
+     "grain": 4.8,
+     "contrast": 1.01,
+     "monolith": 73.26,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.779,
+     "ssim": 0.863,
+     "grain": 4.8,
+     "contrast": 1.05,
+     "monolith": 73.42,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.772,
+     "ssim": 0.851,
+     "grain": 6.2,
+     "contrast": 1.14,
+     "monolith": 70.69,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.779,
+     "ssim": 0.863,
+     "grain": 4.8,
+     "contrast": 1.05,
+     "monolith": 73.42,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.693,
+     "ssim": 0.761,
+     "grain": 12.6,
+     "contrast": 1.28,
+     "monolith": 46.5,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7458__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.778,
+     "ssim": 0.875,
+     "grain": 4.8,
+     "contrast": 1.01,
+     "monolith": 73.26,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.779,
+     "ssim": 0.863,
+     "grain": 4.8,
+     "contrast": 1.05,
+     "monolith": 73.42,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.772,
+     "ssim": 0.851,
+     "grain": 6.2,
+     "contrast": 1.14,
+     "monolith": 70.69,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.779,
+     "ssim": 0.863,
+     "grain": 4.8,
+     "contrast": 1.05,
+     "monolith": 73.42,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.693,
+     "ssim": 0.761,
+     "grain": 12.6,
+     "contrast": 1.28,
+     "monolith": 46.5,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.766,
+     "ssim": 0.859,
+     "grain": 3.6,
+     "contrast": 1.1,
+     "monolith": 81.36,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.767,
+     "ssim": 0.845,
+     "grain": 3.9,
+     "contrast": 1.17,
+     "monolith": 81.98,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.755,
+     "ssim": 0.823,
+     "grain": 5.4,
+     "contrast": 1.23,
+     "monolith": 71.68,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.763,
+     "ssim": 0.84,
+     "grain": 4.3,
+     "contrast": 1.19,
+     "monolith": 78.76,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.727,
+     "ssim": 0.785,
+     "grain": 8.3,
+     "contrast": 1.35,
+     "monolith": 62.34,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.787,
+     "ssim": 0.919,
+     "grain": 3.7,
+     "contrast": 1.1,
+     "monolith": 76.29,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.776,
+     "ssim": 0.903,
+     "grain": 4.6,
+     "contrast": 1.15,
+     "monolith": 76.07,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.77,
+     "ssim": 0.878,
+     "grain": 5.2,
+     "contrast": 1.21,
+     "monolith": 71.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.903,
+     "grain": 4.6,
+     "contrast": 1.15,
+     "monolith": 76.07,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.722,
+     "ssim": 0.846,
+     "grain": 10.5,
+     "contrast": 1.32,
+     "monolith": 58.98,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.855,
+     "grain": 4.2,
+     "contrast": 1.05,
+     "monolith": 74.98,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.855,
+     "grain": 4.5,
+     "contrast": 1.07,
+     "monolith": 77.44,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.753,
+     "ssim": 0.817,
+     "grain": 6,
+     "contrast": 1.13,
+     "monolith": 75.36,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.772,
+     "ssim": 0.844,
+     "grain": 4.4,
+     "contrast": 1.09,
+     "monolith": 76.64,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.672,
+     "ssim": 0.702,
+     "grain": 11,
+     "contrast": 1.23,
+     "monolith": 58.2,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459__1_-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.766,
+     "ssim": 0.859,
+     "grain": 3.6,
+     "contrast": 1.1,
+     "monolith": 81.36,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.767,
+     "ssim": 0.845,
+     "grain": 3.9,
+     "contrast": 1.17,
+     "monolith": 81.98,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.755,
+     "ssim": 0.823,
+     "grain": 5.4,
+     "contrast": 1.23,
+     "monolith": 71.68,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.763,
+     "ssim": 0.84,
+     "grain": 4.3,
+     "contrast": 1.19,
+     "monolith": 78.76,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.727,
+     "ssim": 0.785,
+     "grain": 8.3,
+     "contrast": 1.35,
+     "monolith": 62.34,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459__1_-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.787,
+     "ssim": 0.919,
+     "grain": 3.7,
+     "contrast": 1.1,
+     "monolith": 76.29,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.776,
+     "ssim": 0.903,
+     "grain": 4.6,
+     "contrast": 1.15,
+     "monolith": 76.07,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.77,
+     "ssim": 0.878,
+     "grain": 5.2,
+     "contrast": 1.21,
+     "monolith": 71.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.903,
+     "grain": 4.6,
+     "contrast": 1.15,
+     "monolith": 76.07,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.722,
+     "ssim": 0.846,
+     "grain": 10.5,
+     "contrast": 1.32,
+     "monolith": 58.98,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.855,
+     "grain": 4.2,
+     "contrast": 1.05,
+     "monolith": 74.98,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.855,
+     "grain": 4.5,
+     "contrast": 1.07,
+     "monolith": 77.44,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.753,
+     "ssim": 0.817,
+     "grain": 6,
+     "contrast": 1.13,
+     "monolith": 75.36,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.772,
+     "ssim": 0.844,
+     "grain": 4.4,
+     "contrast": 1.09,
+     "monolith": 76.64,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.672,
+     "ssim": 0.702,
+     "grain": 11,
+     "contrast": 1.23,
+     "monolith": 58.2,
+     "limits": true
+    }
+   }
+  },
+  "IMG_7459__2_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.777,
+     "ssim": 0.855,
+     "grain": 4.2,
+     "contrast": 1.05,
+     "monolith": 74.98,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.773,
+     "ssim": 0.855,
+     "grain": 4.5,
+     "contrast": 1.07,
+     "monolith": 77.44,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.753,
+     "ssim": 0.817,
+     "grain": 6,
+     "contrast": 1.13,
+     "monolith": 75.36,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.772,
+     "ssim": 0.844,
+     "grain": 4.4,
+     "contrast": 1.09,
+     "monolith": 76.64,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.672,
+     "ssim": 0.702,
+     "grain": 11,
+     "contrast": 1.23,
+     "monolith": 58.2,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9213-classic-m": {
+   "detection": {
+    "faces": 3,
+    "eyes": 5,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.826,
+     "ssim": 0.944,
+     "grain": 3.9,
+     "contrast": 1.17,
+     "monolith": 73.88,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.823,
+     "ssim": 0.914,
+     "grain": 5.3,
+     "contrast": 1.34,
+     "monolith": 72.23,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.815,
+     "ssim": 0.894,
+     "grain": 6.5,
+     "contrast": 1.41,
+     "monolith": 64.06,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.823,
+     "ssim": 0.907,
+     "grain": 5.5,
+     "contrast": 1.37,
+     "monolith": 68.52,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.769,
+     "ssim": 0.821,
+     "grain": 10.9,
+     "contrast": 1.61,
+     "monolith": 40.04,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9213-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.825,
+     "ssim": 0.95,
+     "grain": 4.7,
+     "contrast": 1.17,
+     "monolith": 63.89,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.815,
+     "ssim": 0.895,
+     "grain": 6.2,
+     "contrast": 1.43,
+     "monolith": 57.62,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.812,
+     "ssim": 0.87,
+     "grain": 7.2,
+     "contrast": 1.54,
+     "monolith": 48.78,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.814,
+     "ssim": 0.888,
+     "grain": 6.6,
+     "contrast": 1.46,
+     "monolith": 57.4,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.73,
+     "ssim": 0.814,
+     "grain": 14,
+     "contrast": 1.73,
+     "monolith": 37.23,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9213-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.794,
+     "ssim": 0.938,
+     "grain": 6.5,
+     "contrast": 1.11,
+     "monolith": 71.21,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.788,
+     "ssim": 0.924,
+     "grain": 6.8,
+     "contrast": 1.2,
+     "monolith": 62.32,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.777,
+     "ssim": 0.898,
+     "grain": 8.4,
+     "contrast": 1.29,
+     "monolith": 58.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.785,
+     "ssim": 0.914,
+     "grain": 7.2,
+     "contrast": 1.22,
+     "monolith": 58.53,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.712,
+     "ssim": 0.854,
+     "grain": 15,
+     "contrast": 1.39,
+     "monolith": 46.71,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9213__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.794,
+     "ssim": 0.938,
+     "grain": 6.5,
+     "contrast": 1.11,
+     "monolith": 71.21,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.788,
+     "ssim": 0.924,
+     "grain": 6.8,
+     "contrast": 1.2,
+     "monolith": 62.32,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.777,
+     "ssim": 0.898,
+     "grain": 8.4,
+     "contrast": 1.29,
+     "monolith": 58.02,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.785,
+     "ssim": 0.914,
+     "grain": 7.2,
+     "contrast": 1.22,
+     "monolith": 58.53,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.712,
+     "ssim": 0.854,
+     "grain": 15,
+     "contrast": 1.39,
+     "monolith": 46.71,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9623-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.797,
+     "ssim": 0.937,
+     "grain": 2.3,
+     "contrast": 1.12,
+     "monolith": 83.58,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.784,
+     "ssim": 0.895,
+     "grain": 2.7,
+     "contrast": 1.25,
+     "monolith": 77.43,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.761,
+     "ssim": 0.853,
+     "grain": 4.3,
+     "contrast": 1.33,
+     "monolith": 71.79,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.767,
+     "ssim": 0.88,
+     "grain": 3.6,
+     "contrast": 1.27,
+     "monolith": 74.92,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.722,
+     "ssim": 0.807,
+     "grain": 7.7,
+     "contrast": 1.41,
+     "monolith": 66.06,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9623-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.804,
+     "ssim": 0.927,
+     "grain": 2.7,
+     "contrast": 1.16,
+     "monolith": 72.63,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.797,
+     "ssim": 0.904,
+     "grain": 3.9,
+     "contrast": 1.28,
+     "monolith": 71.7,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.763,
+     "ssim": 0.863,
+     "grain": 6.7,
+     "contrast": 1.38,
+     "monolith": 63.38,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.782,
+     "ssim": 0.888,
+     "grain": 4.7,
+     "contrast": 1.31,
+     "monolith": 69.31,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.723,
+     "ssim": 0.819,
+     "grain": 10.5,
+     "contrast": 1.47,
+     "monolith": 61.13,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9623-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.795,
+     "ssim": 0.918,
+     "grain": 3.4,
+     "contrast": 1.07,
+     "monolith": 76.71,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.778,
+     "ssim": 0.894,
+     "grain": 3.6,
+     "contrast": 1.14,
+     "monolith": 75.68,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.77,
+     "ssim": 0.874,
+     "grain": 4.9,
+     "contrast": 1.23,
+     "monolith": 71.55,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.772,
+     "ssim": 0.886,
+     "grain": 4.2,
+     "contrast": 1.17,
+     "monolith": 74.14,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.746,
+     "ssim": 0.843,
+     "grain": 7.6,
+     "contrast": 1.31,
+     "monolith": 65.61,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9623__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.795,
+     "ssim": 0.918,
+     "grain": 3.4,
+     "contrast": 1.07,
+     "monolith": 76.71,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.778,
+     "ssim": 0.894,
+     "grain": 3.6,
+     "contrast": 1.14,
+     "monolith": 75.68,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.77,
+     "ssim": 0.874,
+     "grain": 4.9,
+     "contrast": 1.23,
+     "monolith": 71.55,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.772,
+     "ssim": 0.886,
+     "grain": 4.2,
+     "contrast": 1.17,
+     "monolith": 74.14,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.746,
+     "ssim": 0.843,
+     "grain": 7.6,
+     "contrast": 1.31,
+     "monolith": 65.61,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9736-classic-m": {
+   "detection": {
+    "faces": 0,
+    "eyes": 0,
+    "confident": 0
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.549,
+     "ssim": 0.85,
+     "grain": 2.2,
+     "contrast": 0,
+     "monolith": 92.35,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.505,
+     "ssim": 0.779,
+     "grain": 3.3,
+     "contrast": 0,
+     "monolith": 86.23,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.505,
+     "ssim": 0.779,
+     "grain": 3.3,
+     "contrast": 0,
+     "monolith": 86.23,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.505,
+     "ssim": 0.779,
+     "grain": 3.3,
+     "contrast": 0,
+     "monolith": 86.23,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.462,
+     "ssim": 0.723,
+     "grain": 5.5,
+     "contrast": 0,
+     "monolith": 81.88,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9736-classic-s": {
+   "detection": {
+    "faces": 0,
+    "eyes": 0,
+    "confident": 0
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.56,
+     "ssim": 0.896,
+     "grain": 3.1,
+     "contrast": 0,
+     "monolith": 87.77,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.541,
+     "ssim": 0.868,
+     "grain": 3.1,
+     "contrast": 0,
+     "monolith": 88.5,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.541,
+     "ssim": 0.868,
+     "grain": 3.1,
+     "contrast": 0,
+     "monolith": 88.5,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.541,
+     "ssim": 0.868,
+     "grain": 3.1,
+     "contrast": 0,
+     "monolith": 88.5,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.491,
+     "ssim": 0.808,
+     "grain": 5.8,
+     "contrast": 0,
+     "monolith": 77.29,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9736-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 0
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.756,
+     "ssim": 0.782,
+     "grain": 4.5,
+     "contrast": 1.2,
+     "monolith": 84,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.706,
+     "ssim": 0.721,
+     "grain": 6.3,
+     "contrast": 1.19,
+     "monolith": 76.79,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.715,
+     "ssim": 0.72,
+     "grain": 6.4,
+     "contrast": 1.25,
+     "monolith": 76.76,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.706,
+     "ssim": 0.721,
+     "grain": 6.3,
+     "contrast": 1.19,
+     "monolith": 76.79,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.722,
+     "ssim": 0.705,
+     "grain": 10.1,
+     "contrast": 1.5,
+     "monolith": 65.27,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9736__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 0,
+    "confident": 0
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.756,
+     "ssim": 0.782,
+     "grain": 4.5,
+     "contrast": 1.2,
+     "monolith": 84,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.706,
+     "ssim": 0.721,
+     "grain": 6.3,
+     "contrast": 1.19,
+     "monolith": 76.79,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.715,
+     "ssim": 0.72,
+     "grain": 6.4,
+     "contrast": 1.25,
+     "monolith": 76.76,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.706,
+     "ssim": 0.721,
+     "grain": 6.3,
+     "contrast": 1.19,
+     "monolith": 76.79,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.722,
+     "ssim": 0.705,
+     "grain": 10.1,
+     "contrast": 1.5,
+     "monolith": 65.27,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9771-classic-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.791,
+     "ssim": 0.922,
+     "grain": 2.9,
+     "contrast": 1.08,
+     "monolith": 87.14,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.795,
+     "ssim": 0.891,
+     "grain": 4.3,
+     "contrast": 1.26,
+     "monolith": 82.86,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.783,
+     "ssim": 0.863,
+     "grain": 5.3,
+     "contrast": 1.32,
+     "monolith": 74.41,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.787,
+     "ssim": 0.88,
+     "grain": 4.9,
+     "contrast": 1.28,
+     "monolith": 78.55,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.734,
+     "ssim": 0.779,
+     "grain": 8.3,
+     "contrast": 1.45,
+     "monolith": 68.1,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9771-classic-s": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.788,
+     "ssim": 0.938,
+     "grain": 3.4,
+     "contrast": 1.08,
+     "monolith": 85.38,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.801,
+     "ssim": 0.897,
+     "grain": 4.8,
+     "contrast": 1.4,
+     "monolith": 76.39,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.783,
+     "ssim": 0.867,
+     "grain": 6.5,
+     "contrast": 1.46,
+     "monolith": 70.92,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.8,
+     "ssim": 0.887,
+     "grain": 5,
+     "contrast": 1.42,
+     "monolith": 72.49,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.727,
+     "ssim": 0.795,
+     "grain": 10.7,
+     "contrast": 1.61,
+     "monolith": 63.04,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9771-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.783,
+     "ssim": 0.924,
+     "grain": 5,
+     "contrast": 1.1,
+     "monolith": 81.12,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.778,
+     "ssim": 0.912,
+     "grain": 5.7,
+     "contrast": 1.17,
+     "monolith": 78.09,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.771,
+     "ssim": 0.895,
+     "grain": 6.9,
+     "contrast": 1.23,
+     "monolith": 71.06,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.905,
+     "grain": 6.2,
+     "contrast": 1.19,
+     "monolith": 73.75,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.73,
+     "ssim": 0.837,
+     "grain": 10.6,
+     "contrast": 1.35,
+     "monolith": 57.67,
+     "limits": true
+    }
+   }
+  },
+  "IMG_9771__1_-color-m": {
+   "detection": {
+    "faces": 1,
+    "eyes": 2,
+    "confident": 1
+   },
+   "variants": {
+    "A": {
+     "recognition": 0.783,
+     "ssim": 0.924,
+     "grain": 5,
+     "contrast": 1.1,
+     "monolith": 81.12,
+     "limits": true
+    },
+    "B": {
+     "recognition": 0.778,
+     "ssim": 0.912,
+     "grain": 5.7,
+     "contrast": 1.17,
+     "monolith": 78.09,
+     "limits": true
+    },
+    "K": {
+     "recognition": 0.771,
+     "ssim": 0.895,
+     "grain": 6.9,
+     "contrast": 1.23,
+     "monolith": 71.06,
+     "limits": true
+    },
+    "I": {
+     "recognition": 0.776,
+     "ssim": 0.905,
+     "grain": 6.2,
+     "contrast": 1.19,
+     "monolith": 73.75,
+     "limits": true
+    },
+    "G": {
+     "recognition": 0.73,
+     "ssim": 0.837,
+     "grain": 10.6,
+     "contrast": 1.35,
+     "monolith": 57.67,
+     "limits": true
+    }
+   }
+  }
+ }
+}

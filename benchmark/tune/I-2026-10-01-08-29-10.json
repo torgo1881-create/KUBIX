@@ -1,0 +1,118 @@
+{
+ "variant": "I",
+ "category": null,
+ "params": [
+  "dithering",
+  "toneBalance",
+  "faceVolume",
+  "contrast",
+  "saturation",
+  "sharpen",
+  "smoothing",
+  "eyeBoost.contrast",
+  "eyeBoost.darkBias"
+ ],
+ "frames": {
+  "search": 24,
+  "total": 73
+ },
+ "budget": 60,
+ "evaluations": 22,
+ "durationSec": 159,
+ "start": {
+  "settings": {
+   "faceExposure": true,
+   "levels": true,
+   "dithering": 0,
+   "toneBalance": 0,
+   "eyeBoost": {
+    "contrast": 1.1,
+    "darkBias": 0.45,
+    "radiusScale": 1.6,
+    "includeBrows": true
+   },
+   "contrast": 1.08,
+   "saturation": 0.96,
+   "sharpen": 0.45,
+   "smoothing": 0
+  },
+  "search": {
+   "frames": 24,
+   "recognition": 0.7611249999999998,
+   "grain": 5.824999999999999,
+   "contrast": 1.1975,
+   "ssim": 0.8829583333333332,
+   "limits": true
+  },
+  "full": {
+   "frames": 73,
+   "recognition": 0.7615753424657535,
+   "grain": 5.613698630136986,
+   "contrast": 1.1991780821917808,
+   "ssim": 0.8731232876712332,
+   "limits": true
+  }
+ },
+ "best": {
+  "settings": {
+   "faceExposure": true,
+   "levels": true,
+   "dithering": 0,
+   "toneBalance": 0.2,
+   "eyeBoost": {
+    "contrast": 1.1,
+    "darkBias": 0.45,
+    "radiusScale": 1.6,
+    "includeBrows": true
+   },
+   "contrast": 0.98,
+   "saturation": 0.86,
+   "sharpen": 0.45,
+   "smoothing": 0
+  },
+  "search": {
+   "grain": 5.258333333333335,
+   "contrast": 1.1516666666666666,
+   "ssim": 0.8945833333333332,
+   "limits": true,
+   "recognition": 0.7677083333333333
+  },
+  "full": {
+   "frames": 73,
+   "recognition": 0.7679452054794524,
+   "grain": 5.0328767123287665,
+   "contrast": 1.1508219178082189,
+   "ssim": 0.8851095890410963,
+   "limits": true
+  }
+ },
+ "steps": [
+  {
+   "round": 1,
+   "param": "toneBalance",
+   "from": 0,
+   "to": 0.2,
+   "objective": 0.7631666666666667
+  },
+  {
+   "round": 1,
+   "param": "contrast",
+   "from": 1.08,
+   "to": 0.98,
+   "objective": 0.7653333333333333
+  },
+  {
+   "round": 1,
+   "param": "saturation",
+   "from": 0.96,
+   "to": 0.86,
+   "objective": 0.7677083333333333
+  }
+ ],
+ "changes": [
+  "тональный баланс (toneBalance): 0 → 0.2",
+  "контраст (contrast): 1.08 → 0.98",
+  "насыщенность (saturation): 0.96 → 0.86"
+ ],
+ "confirmed": true
+}
