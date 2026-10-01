@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700;800&family=Mulish:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0;background:#F6F1EA;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#C8471F;text-decoration:none}
+a:hover{color:#14302F}
+input[type=range]{accent-color:#C8471F}
+</style>
+<script src="kubix-engine.js"></script>
+</helmet>
+<div style="min-height:100vh;background:#F6F1EA;color:#14302F;font-family:'Mulish',system-ui,sans-serif;font-size:16px;line-height:1.55;font-weight:500">
+
+  <header style="position:sticky;top:0;z-index:20;background:#F6F1EA;border-bottom:1px solid #E2D9CC">
+    <div style="max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <button onClick="{{ goLanding }}" style="display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;color:#14302F">
+        <span style="display:grid;grid-template-columns:repeat(3,7px);gap:2px"><span style="width:7px;height:7px;border-radius:2px;background:#C8471F"></span><span style="width:7px;height:7px;border-radius:2px;background:#14302F"></span><span style="width:7px;height:7px;border-radius:2px;background:#F6D5BF"></span><span style="width:7px;height:7px;border-radius:2px;background:#14302F"></span><span style="width:7px;height:7px;border-radius:2px;background:#F6D5BF"></span><span style="width:7px;height:7px;border-radius:2px;background:#C8471F"></span><span style="width:7px;height:7px;border-radius:2px;background:#F6D5BF"></span><span style="width:7px;height:7px;border-radius:2px;background:#C8471F"></span><span style="width:7px;height:7px;border-radius:2px;background:#14302F"></span></span>
+        <span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:22px">kubix</span>
+      </button>
+      <nav style="display:flex;gap:22px;flex-wrap:wrap;align-items:center;font-weight:700;font-size:15px">
+        <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}"><a href="#catalog" style="color:#14302F">Каталог</a><a href="#how" style="color:#14302F">Как это работает</a><a href="#gift" style="color:#14302F">В подарок</a><a href="#faq" style="color:#14302F">Вопросы</a></sc-if>
+      </nav>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <button onClick="{{ goUpload }}" style="background:transparent;border:2px solid #14302F;color:#14302F;border-radius:12px;padding:9px 16px;font:inherit;font-weight:800;cursor:pointer" style-hover="background:#14302F;color:#F6F1EA">Загрузить фото</button>
+        <span style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E2D9CC;border-radius:12px;padding:9px 14px;font-weight:800">Корзина <span style="min-width:22px;height:22px;border-radius:11px;background:{{ cartBg }};color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:12px">{{ cartCount }}</span></span>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width:1240px;margin:0 auto;padding:48px 24px 72px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:48px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <span style="align-self:flex-start;background:#D3E8E0;color:#14302F;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px">Фото-конструктор</span>
+        <h1 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(40px,5.8vw,78px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Собери любое фото <span style="color:#C8471F">из деталей</span></h1>
+        <p style="margin:0;max-width:500px;font-size:19px;color:#4F6563;text-wrap:pretty">Один набор — и любая фотография становится картиной для стены. Загрузи снимок, получи схему и собирай.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="#catalog" style="background:#C8471F;color:#FFFFFF;border-radius:14px;padding:16px 28px;font-size:17px;font-weight:800">Выбрать набор</a>
+          <button onClick="{{ goUpload }}" style="background:#FFFFFF;border:0;border-radius:14px;padding:16px 24px;font:inherit;font-size:17px;font-weight:800;color:#14302F;cursor:pointer;box-shadow:inset 0 0 0 1px #E2D9CC">Попробовать бесплатно</button>
+        </div>
+      </div>
+      <div style="position:relative;padding:0 0 60px 40px;display:flex;justify-content:center">
+        <div style="width:min(100%,380px);background:#14302F;border-radius:24px;padding:16px;transform:rotate(1.5deg)">
+          <sc-if value="{{ ready }}"><div role="img" aria-label="Мозаика" style="width:100%;aspect-ratio:2/3;border-radius:8px;background-image:url({{ heroColor }});background-size:100% 100%"></div></sc-if>
+        </div>
+        <div style="position:absolute;left:0;bottom:0;width:min(62%,280px);aspect-ratio:16/10;border-radius:18px;background:repeating-linear-gradient(135deg,#F6D5BF 0 10px,#F2C9A8 10px 20px);border:4px solid #F6F1EA;display:flex;align-items:flex-end;padding:14px;box-shadow:0 20px 40px -20px rgba(20,48,47,.5)">
+          <span style="background:#14302F;color:#F6F1EA;border-radius:8px;padding:4px 8px;font-family:monospace;font-size:12px">видео: как собирается картина</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalog" style="background:#FFFFFF;border-top:1px solid #E2D9CC;border-bottom:1px solid #E2D9CC">
+      <div style="max-width:1240px;margin:0 auto;padding:80px 24px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap">
+          <h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,3.8vw,48px);letter-spacing:-.02em;line-height:1.05">Какой формат выбрать?</h2>
+          <span style="color:#4F6563;max-width:380px">Превью — это твоё фото в палитре каждого набора. Загрузи своё, и картинки обновятся.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:16px">
+          <sc-for list="{{ shop }}" as="q" hint-placeholder-count="5">
+            <article style="background:#F6F1EA;border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#14302F;border-radius:14px;padding:10px;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center"><sc-if value="{{ ready }}"><div role="img" aria-label="Превью набора" style="width:100%;max-height:100%;aspect-ratio:{{ q.aspect }};border-radius:4px;background-image:url({{ q.preview }});background-size:100% 100%"></div></sc-if></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:20px">{{ q.name }}</span><span style="font-size:13px;color:#4F6563">{{ q.cat }}</span></div>
+              <dl style="margin:0;padding:0 4px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px"><dt style="color:#4F6563">Картина</dt><dd style="margin:0;font-weight:800">{{ q.size }}</dd><dt style="color:#4F6563">Деталей</dt><dd style="margin:0;font-weight:800">{{ q.pieces }}</dd><dt style="color:#4F6563">Цвета</dt><dd style="margin:0;display:flex;gap:2px;align-items:center"><sc-for list="{{ q.swatches }}" as="c"><span style="width:12px;height:12px;border-radius:3px;background:{{ c.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span></sc-for></dd></dl>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-top:auto;padding:4px 4px 2px">
+                <button onClick="{{ q.onBuy }}" style="width:100%;height:42px;background:#C8471F;color:#FFFFFF;border:0;border-radius:10px;font:inherit;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#A93A17">В корзину</button>
+                <button onClick="{{ q.onStart }}" title="Примерить своё фото" style="width:100%;height:42px;background:#FFFFFF;border:1.5px solid #14302F;border-radius:10px;font:inherit;font-size:15px;font-weight:700;color:#14302F;cursor:pointer" style-hover="background:#14302F;color:#FFFFFF">Примерить</button>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" style="max-width:1240px;margin:0 auto;padding:80px 24px;display:flex;flex-direction:column;gap:32px">
+      <h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,3.8vw,48px);letter-spacing:-.02em;line-height:1.05">Как это работает</h2>
+      <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+        <li style="background:#FFFFFF;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:48px;line-height:1;color:#C8471F">1</span><strong style="font-size:20px;font-weight:800">Выбери набор</strong><span style="color:#4F6563">Classic в оттенках серого или Color с тёплыми тонами. От 51×51 до 76×76 см.</span></li>
+        <li style="background:#FFFFFF;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:48px;line-height:1;color:#C8471F">2</span><strong style="font-size:20px;font-weight:800">Загрузи фото в генератор</strong><span style="color:#4F6563">Код для сборки лежит в коробке. А примерить можно бесплатно, ещё до покупки.</span></li>
+        <li style="background:#14302F;color:#F6F1EA;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:48px;line-height:1;color:#F6D5BF">3</span><strong style="font-size:20px;font-weight:800">Получи инструкцию</strong><span style="color:#C9D6D3">Схема по блокам с номерами цветов, на экране или в PDF. Надоело фото — пересобери с новым.</span></li>
+      </ol>
+    </section>
+
+    <section style="background:#14302F;color:#F6F1EA">
+      <div style="max-width:1240px;margin:0 auto;padding:80px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:48px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,3.8vw,48px);letter-spacing:-.02em;line-height:1.05">Посмотри, как будет выглядеть твоя картина</h2>
+          <p style="margin:0;color:#C9D6D3;font-size:17px">Двигай ползунок: слева фото, справа оно же в деталях Color M. Загрузи своё — всё считается прямо в браузере.</p>
+          <label onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="border:2px dashed #4F7A76;border-radius:18px;padding:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange="{{ onLandFile }}" style="display:none">
+            <span style="background:#C8471F;color:#FFFFFF;border-radius:12px;padding:12px 20px;font-weight:800">Загрузить файл</span>
+            <span style="color:#C9D6D3;font-size:14px">или перетащи фото сюда · {{ photoName }}</span>
+          </label>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;align-items:center">
+          <div style="position:relative;width:min(100%,380px);aspect-ratio:2/3;border-radius:16px;overflow:hidden;background:#0E2322">
+            <sc-if value="{{ ready }}"><div style="position:absolute;inset:0;background-image:url({{ heroColor }});background-size:100% 100%"></div><div style="position:absolute;inset:0;background-image:url({{ heroPhoto }});background-size:100% 100%;clip-path:inset(0 {{ cmpClip }} 0 0)"></div></sc-if>
+            <div style="position:absolute;top:0;bottom:0;left:{{ cmpPos }};width:3px;margin-left:-1.5px;background:#F6F1EA;pointer-events:none"></div>
+            <span style="position:absolute;left:10px;top:10px;background:rgba(20,48,47,.85);color:#F6F1EA;border-radius:8px;padding:3px 8px;font-size:12px;font-weight:800">фото</span>
+            <span style="position:absolute;right:10px;top:10px;background:#C8471F;color:#FFFFFF;border-radius:8px;padding:3px 8px;font-size:12px;font-weight:800">мозаика</span>
+          </div>
+          <input type="range" min="0" max="100" step="1" value="{{ cmp }}" onChange="{{ onCmp }}" aria-label="Сравнение" style="width:min(100%,380px)">
+        </div>
+      </div>
+    </section>
+
+    <section id="gift" style="max-width:1240px;margin:0 auto;padding:80px 24px;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,3.8vw,48px);letter-spacing:-.02em;line-height:1.05">Не знаешь, что подарить?</h2><p style="margin:0;color:#4F6563;font-size:17px">Картина из общего фото — подарок, который собирают своими руками.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+        <div style="background:#F6D5BF;border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:10px;min-height:200px"><strong style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:22px">Любое изображение</strong><span>Портрет, питомец, пейзаж — генератор подберёт тона под палитру набора.</span></div>
+        <div style="background:#D3E8E0;border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:10px;min-height:200px"><strong style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:22px">1 набор — ∞ фото</strong><span>Детали те же, меняется только схема. Разбери и собери новую картину.</span></div>
+        <div style="background:#FFFFFF;border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:10px;min-height:200px"><strong style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:22px">Вместе веселее</strong><span>Блоки 8×8 удобно делить: каждый собирает свой кусок картины.</span></div>
+      </div>
+    </section>
+
+    <section id="faq" style="background:#FFFFFF;border-top:1px solid #E2D9CC;border-bottom:1px solid #E2D9CC">
+      <div style="max-width:880px;margin:0 auto;padding:80px 24px;display:flex;flex-direction:column;gap:24px">
+        <h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,3.8vw,48px);letter-spacing:-.02em;line-height:1.05">Вопросы</h2>
+        <div style="display:flex;flex-direction:column;border-top:1px solid #E2D9CC">
+          <sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+            <div style="border-bottom:1px solid #E2D9CC">
+              <button onClick="{{ f.onToggle }}" style="width:100%;display:flex;justify-content:space-between;gap:16px;align-items:center;background:none;border:0;padding:20px 0;font:inherit;font-weight:800;font-size:18px;color:#14302F;text-align:left;cursor:pointer">{{ f.q }}<span style="flex:none;width:32px;height:32px;border-radius:10px;background:#F6F1EA;display:flex;align-items:center;justify-content:center;color:#C8471F;font-size:20px">{{ f.sign }}</span></button>
+              <sc-if value="{{ f.open }}"><p style="margin:0 0 20px;color:#4F6563;max-width:680px">{{ f.a }}</p></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width:1240px;margin:0 auto;padding:80px 24px">
+      <div style="background:#C8471F;color:#FFFFFF;border-radius:28px;padding:44px 32px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:8px;max-width:520px"><h2 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(26px,3vw,38px);line-height:1.1">Уже купил набор?</h2><span>Введи код из коробки, загрузи фото и скачай инструкцию.</span></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;flex:1 1 320px;max-width:460px">
+          <input value="{{ code }}" onChange="{{ onCode }}" placeholder="Код из коробки" style="flex:1 1 180px;min-width:0;border:0;border-radius:12px;padding:14px 16px;font:inherit;font-weight:700;color:#14302F;background:#FFFFFF">
+          <button onClick="{{ onCodeGo }}" style="background:#14302F;color:#F6F1EA;border:0;border-radius:12px;padding:14px 22px;font:inherit;font-weight:800;cursor:pointer">Дальше →</button>
+        </div>
+      </div>
+    </section>
+    <footer style="border-top:1px solid #E2D9CC"><div style="max-width:1240px;margin:0 auto;padding:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#4F6563;font-size:14px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;color:#14302F">kubix</span><span>© 2026</span></div></footer>
+  </sc-if>
+
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1240px;margin:0 auto;padding:24px 24px 130px;display:flex;flex-direction:column;gap:28px">
+      <ol style="list-style:none;margin:0;padding:6px;display:flex;gap:6px;overflow-x:auto;background:#FFFFFF;border-radius:16px">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+          <li style="flex:1 0 auto"><button onClick="{{ st.onClick }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;background:{{ st.bg }};color:{{ st.ink }};border:0;border-radius:11px;padding:10px 14px;font:inherit;font-weight:800;font-size:14px;cursor:pointer"><span style="font-family:'Montserrat Alternates',sans-serif">{{ st.n }}</span>{{ st.label }}</button></li>
+        </sc-for>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:760px">
+        <h1 style="margin:0;font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:clamp(30px,4.2vw,52px);letter-spacing:-.02em;line-height:1.05">{{ stepTitle }}</h1>
+        <p style="margin:0;color:#4F6563;font-size:17px;text-wrap:pretty">{{ stepSub }}</p>
+      </div>
+
+      <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px">
+          <sc-for list="{{ shop }}" as="q" hint-placeholder-count="5">
+            <button onClick="{{ q.onPick }}" style="text-align:left;background:#FFFFFF;border:0;box-shadow:inset 0 0 0 2px {{ q.bd }};border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px;font:inherit;color:#14302F;cursor:pointer">
+              <div style="background:#14302F;border-radius:12px;padding:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;width:100%"><sc-if value="{{ ready }}"><div style="height:100%;max-width:100%;aspect-ratio:{{ q.aspect }};border-radius:3px;background-image:url({{ q.preview }});background-size:100% 100%"></div></sc-if></div>
+              <span style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px"><span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:19px">{{ q.name }}</span><span style="font-size:13px;color:#4F6563">{{ q.size }}</span></span>
+              <span style="padding:0 4px 4px;font-size:13px;color:#4F6563">{{ q.colors }} · {{ q.pieces }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:stretch">
+          <label onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="flex:2 1 420px;min-height:340px;border:2px dashed {{ dropBd }};border-radius:24px;background:{{ dropBg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 24px;text-align:center;cursor:pointer">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange="{{ onFile }}" style="display:none">
+            <span style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:26px">Перетащи фото сюда</span>
+            <span style="color:#4F6563">JPG, PNG или WEBP</span>
+            <span style="background:#C8471F;color:#FFFFFF;border-radius:12px;padding:12px 22px;font-weight:800">Выбрать файл</span>
+          </label>
+          <div style="flex:1 1 260px;background:#FFFFFF;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:14px;font-weight:800;color:#4F6563">Сейчас загружено</span>
+            <sc-if value="{{ ready }}"><div role="img" style="width:100%;height:240px;border-radius:14px;background-color:#F6F1EA;background-image:url({{ srcUrl }});background-size:contain;background-position:center;background-repeat:no-repeat"></div></sc-if>
+            <span style="font-size:14px;overflow:hidden;text-overflow:ellipsis">{{ photoName }}</span>
+            <button onClick="{{ useSample }}" style="background:#14302F;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:800;color:#F6F1EA;cursor:pointer">Продолжить с этим фото</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerCancel="{{ onUp }}" style="position:relative;overflow:hidden;aspect-ratio:{{ srcAspect }};width:100%;border-radius:20px;background:#E2D9CC;cursor:grab;touch-action:none;user-select:none">
+              <sc-if value="{{ ready }}"><div style="position:absolute;inset:0;background-image:url({{ srcUrl }});background-size:100% 100%;pointer-events:none"></div></sc-if>
+              <div style="position:absolute;left:{{ frameL }};top:{{ frameT }};width:{{ frameW }};height:{{ frameH }};border:3px solid #C8471F;border-radius:6px;box-shadow:0 0 0 9999px rgba(20,48,47,.6);pointer-events:none"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;background:#FFFFFF;border-radius:14px;padding:10px 16px"><span style="font-size:14px;font-weight:800">Масштаб</span><input type="range" min="1" max="3" step="0.05" value="{{ zoom }}" onChange="{{ onZoom }}" style="flex:1"><span style="font-size:14px;font-weight:800;width:48px;text-align:right">{{ zoomLabel }}</span></div>
+          </div>
+          <div style="background:#14302F;border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <sc-if value="{{ ready }}"><div role="img" aria-label="Превью" style="width:100%;aspect-ratio:{{ aspect }};border-radius:8px;background-image:url({{ curUrl }});background-size:100% 100%"></div></sc-if>
+            <span style="color:#C9D6D3;font-size:14px;padding:0 4px">Превью · <b style="color:#F6F1EA">{{ curName }}</b> · {{ sumSet }} · {{ sumSize }}</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px">
+          <sc-for list="{{ variants }}" as="v" hint-placeholder-count="4">
+            <article style="background:#FFFFFF;box-shadow:inset 0 0 0 2px {{ v.bd }};border-radius:22px;padding:12px;display:flex;flex-direction:column;gap:10px">
+              <button onClick="{{ v.onPick }}" style="padding:8px;border:0;background:#14302F;border-radius:14px;cursor:pointer;display:block"><div style="width:100%;aspect-ratio:{{ aspect }};border-radius:4px;background-image:url({{ v.url }});background-size:100% 100%"></div></button>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 4px"><span style="font-weight:800;font-size:18px">{{ v.name }}</span><span style="background:#F6F1EA;border-radius:8px;padding:2px 8px;font-weight:800;font-size:14px">{{ v.score }}</span></div>
+              <sc-if value="{{ v.best }}"><span style="align-self:flex-start;margin-left:4px;background:#D3E8E0;font-size:12px;font-weight:800;padding:2px 10px;border-radius:8px">лучшая оценка</span></sc-if>
+              <p style="margin:0;padding:0 4px;font-size:14px;color:#4F6563;text-wrap:pretty">{{ v.desc }}</p>
+              <button onClick="{{ v.onPick }}" style="margin-top:auto;background:{{ v.btnBg }};color:{{ v.btnInk }};border:0;box-shadow:inset 0 0 0 1.5px #E2D9CC;border-radius:12px;padding:10px 14px;font:inherit;font-weight:800;font-size:14px;cursor:pointer">{{ v.btn }}</button>
+            </article>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#FFFFFF;border-radius:18px;padding:12px 18px">
+            <span style="font-size:14px;color:#4F6563"><b style="color:#14302F">{{ sumSet }}</b> · {{ sumSize }} · {{ curName }} · {{ sumCells }} деталей</span>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="display:flex;background:#F6F1EA;border-radius:12px;padding:3px"><sc-for list="{{ blockSizes }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.onClick }}" style="background:{{ b.bg }};color:{{ b.ink }};border:0;border-radius:9px;padding:6px 12px;font:inherit;font-weight:800;font-size:13px;cursor:pointer">{{ b.label }}</button></sc-for></div><button onClick="{{ onPdf }}" style="background:#C8471F;border:0;border-radius:12px;color:#FFFFFF;padding:9px 16px;font:inherit;font-weight:800;font-size:14px;cursor:pointer">Скачать PDF</button></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+            <div style="flex:2 1 440px;background:#FFFFFF;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div><div style="font-family:'Montserrat Alternates',sans-serif;font-weight:800;font-size:24px">{{ blockStep }}</div><div style="font-size:14px;color:#4F6563">{{ blockId }} · {{ blockPos }}</div></div>
+                <div style="display:flex;gap:8px"><button onClick="{{ onPrev }}" style="opacity:{{ prevOp }};background:#F6F1EA;border:0;border-radius:12px;padding:11px 16px;font:inherit;font-weight:800;cursor:pointer">←</button><button onClick="{{ onNext5 }}" style="opacity:{{ nextOp }};background:#14302F;border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:800;color:#F6F1EA;cursor:pointer">Следующий блок →</button></div>
+              </div>
+              <div style="height:8px;border-radius:8px;background:#F6F1EA;overflow:hidden"><div style="height:100%;width:{{ progress }};background:#C8471F"></div></div>
+              <div style="display:grid;grid-template-columns:{{ blockCols }};gap:3px;background:#14302F;padding:6px;border-radius:10px;max-width:640px">
+                <sc-for list="{{ blockCells }}" as="c" hint-placeholder-count="64"><div style="aspect-ratio:1;border-radius:3px;background:{{ c.hex }};color:{{ c.ink }};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(9px,1.6vw,15px)">{{ c.num }}</div></sc-for>
+              </div>
+              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ blockCounts }}" as="c"><li style="display:flex;align-items:center;gap:8px;font-size:14px;background:#F6F1EA;border-radius:10px;padding:5px 10px 5px 5px"><span style="width:20px;height:20px;border-radius:5px;background:{{ c.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span><b>{{ c.num }}</b><span>{{ c.name }}</span><b style="color:#C8471F">×{{ c.count }}</b></li></sc-for></ul>
+            </div>
+            <aside style="flex:1 1 240px;display:flex;flex-direction:column;gap:16px">
+              <div style="background:#14302F;border-radius:20px;padding:10px"><div style="position:relative;overflow:hidden;border-radius:6px"><sc-if value="{{ ready }}"><div style="width:100%;aspect-ratio:{{ aspect }};background-image:url({{ curUrl }});background-size:100% 100%"></div></sc-if><div style="position:absolute;left:{{ hlL }};top:{{ hlT }};width:{{ hlW }};height:{{ hlH }};border:3px solid #C8471F;box-shadow:0 0 0 9999px rgba(20,48,47,.55)"></div></div></div>
+              <ul style="list-style:none;margin:0;padding:14px 18px;display:flex;flex-direction:column;gap:2px;background:#FFFFFF;border-radius:20px"><sc-for list="{{ legend }}" as="l" hint-placeholder-count="5"><li style="display:flex;align-items:center;gap:10px;font-size:14px;padding:5px 0"><b style="width:16px;color:#4F6563">{{ l.num }}</b><span style="width:16px;height:16px;border-radius:4px;background:{{ l.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span><span>{{ l.name }}</span><span style="margin-left:auto;color:#4F6563">{{ l.total }}</span></li></sc-for></ul>
+            </aside>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+    <div style="position:sticky;bottom:0;z-index:15;background:rgba(246,241,234,.94);backdrop-filter:blur(10px);border-top:1px solid #E2D9CC">
+      <div style="max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <sc-if value="{{ hasBack }}"><button onClick="{{ onBack }}" style="background:#FFFFFF;border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:800;color:#14302F;cursor:pointer;box-shadow:inset 0 0 0 1px #E2D9CC">← Назад</button></sc-if>
+        <span style="flex:1"></span>
+        <sc-if value="{{ hasNext }}"><button onClick="{{ onNext }}" style="background:#C8471F;border:0;border-radius:12px;padding:13px 24px;font:inherit;font-weight:800;color:#FFFFFF;cursor:pointer">{{ nextLabel }} →</button></sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}"><div style="position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:40;background:#14302F;color:#F6F1EA;border-radius:14px;padding:12px 20px;font-size:14px;font-weight:700;max-width:min(90vw,520px);text-align:center">{{ toast }}</div></sc-if>
+  <nav style="position:fixed;right:16px;bottom:84px;z-index:30;display:flex;gap:2px;background:#FFFFFF;border-radius:12px;padding:3px;font-size:12px;font-weight:800;box-shadow:0 4px 16px -8px rgba(20,48,47,.4)">
+    <a href="KUBIX%20A%20Craft.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">A</a><a href="KUBIX%20B%20Night.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">B</a><a href="KUBIX%20C%20Blocks.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">C</a><a href="KUBIX%20D%20Studio.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">D</a><a href="KUBIX%20E%20Riso.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">E</a><a href="KUBIX%20F%20Soft.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">F</a><a href="KUBIX%20G%20Gazette.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">G</a><a href="KUBIX%20H%20Ash.dc.html" style="padding:4px 8px;border-radius:9px;color:#14302F">H</a><a href="KUBIX%20I%20Shop.dc.html" style="padding:4px 8px;border-radius:9px;background:#C8471F;color:#FFFFFF">I</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { screen: 'landing', step: 1, presetId: 'color-m', crop: { z: 1, x: 0.5, y: 0.42 }, variantId: 'G', blockSize: 8, block: -1, v: 0, photoName: 'пример фото', drag: false, toast: '', cart: 0, faq: 0, cmp: 50, code: '' };
+  wantPreviews = true;
+  T = {
+    selBd: '#C8471F', bd: 'transparent', selBg: '#FFFFFF', bg: '#FFFFFF', dashed: '#C9BBA6',
+    on: '#14302F', onInk: '#F6F1EA', offInk: '#14302F',
+    step: { on: { bg: '#C8471F', ink: '#FFFFFF', bd: '' }, done: { bg: '#D3E8E0', ink: '#14302F', bd: '' }, todo: { bg: 'transparent', ink: '#4F6563', bd: '' } },
+  };
+  R = { gap: 0.1, base: '#14302F', shape: 'square', bevel: true };
+  FAQ = [
+    ['Почему деталей в коробке больше, чем клеток?', 'Запаса примерно в полтора раза больше: любая фотография где-то перекошена в один цвет, и без запаса картину было бы не собрать.'],
+    ['Какое фото подойдёт лучше всего?', 'Портрет при дневном свете, лицо крупно. Мелкие детали на дальнем плане в сетке 64×64 почти не читаются.'],
+    ['Можно пересобрать с другим фото?', 'Да. Детали те же, меняется только схема: загрузи новое фото и получи новую инструкцию.'],
+    ['Фото куда-то отправляется?', 'Нет, превью и схема считаются прямо в браузере.'],
+  ];
+  componentDidMount() {
+    const w = () => { if (window.Kubix) { this.K = window.Kubix; this.K.init(this); this.forceUpdate(); } else setTimeout(w, 30); };
+    w();
+  }
+  renderVals() {
+    if (!this.K) return { ready: false, isLanding: true, isApp: false, cartCount: 0, cartBg: '#B9B0A3' };
+    const v = this.K.vals(this), s = this.state;
+    const all = [...v.presetsClassic, ...v.presetsColor];
+    return {
+      ...v,
+      cartCount: s.cart, cartBg: s.cart ? '#C8471F' : '#B9B0A3',
+      shop: all.map((q) => ({ ...q, onBuy: () => { this.setState((st) => ({ cart: st.cart + 1 })); this.K.toast(this, q.name + ' добавлен в корзину'); } })),
+      faq: this.FAQ.map(([q, a], i) => ({ q, a, open: s.faq === i, sign: s.faq === i ? '−' : '+', onToggle: () => this.setState({ faq: s.faq === i ? -1 : i }) })),
+      cmp: s.cmp, cmpPos: s.cmp + '%', cmpClip: (100 - s.cmp) + '%', onCmp: (e) => this.setState({ cmp: +e.target.value }),
+      onLandFile: (e) => { const f = e.target.files && e.target.files[0]; if (f) { this.K.load(f).then((c) => { this._src = c; this.setState((st) => ({ v: st.v + 1, photoName: f.name })); }); } e.target.value = ''; },
+      onDrop: (e) => { e.preventDefault(); this.setState({ drag: false }); const f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return; if (s.screen === 'landing') this.K.load(f).then((c) => { this._src = c; this.setState((st) => ({ v: st.v + 1, photoName: f.name })); }); else v.onDrop(e); },
+      code: s.code, onCode: (e) => this.setState({ code: e.target.value }),
+      onCodeGo: () => { if (!s.code.trim()) { this.K.toast(this, 'Введи код с карточки внутри коробки'); return; } this.setState({ screen: 'app', step: 2 }); window.scrollTo({ top: 0 }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
