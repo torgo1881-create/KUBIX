@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import type { Variant } from '@/algorithms/variants/variantGenerator';
+import { BaseColorChoice } from '@/components/BaseColorChoice';
 import { BuildMode } from '@/components/BuildMode';
 import { CanvasMirror } from '@/components/CanvasMirror';
 import { ImageCropper } from '@/components/ImageCropper';
@@ -26,6 +27,10 @@ interface GeneratorProps {
   product: ProductPreset;
   previews: PresetPreviews;
   onSelectPreset: (preset: ProductPreset) => void;
+
+  /** Участвует ли чёрная основа в генерации; у наборов без основы — всегда false. */
+  withBase: boolean;
+  onBaseChange: (withBase: boolean) => void;
 
   /** Загруженное фото; null — пока готовится пример. */
   image: SourceImage | null;
@@ -53,10 +58,10 @@ interface GeneratorProps {
  * шагами ничего не теряет.
  */
 export function Generator(props: GeneratorProps) {
-  const { step, onStep, product, lineup, variants, variantId } = props;
+  const { step, onStep, product, withBase, lineup, variants, variantId } = props;
   const meta = SHOP_STEPS[step - 1];
   const aspect = presetAspect(product);
-  const card = describePreset(product, presetPaletteSize(product));
+  const card = describePreset(product, presetPaletteSize(product, withBase), withBase);
   const preset = lineup.find((item) => item.id === variantId) ?? lineup[0];
   const variant = variants.get(variantId);
 
@@ -69,7 +74,11 @@ export function Generator(props: GeneratorProps) {
       ? lastGrid.current
       : null);
 
-  const palette = React.useMemo(() => buildPresetPalette(product), [product]);
+  const palette = React.useMemo(() => buildPresetPalette(product, withBase), [product, withBase]);
+  // В PDF и в легенде видно, с основой собрана схема или без неё.
+  const paletteLabel = product.baseColorEnabled
+    ? `${getPaletteLabel(product.paletteId)} · ${withBase ? 'с основой' : 'без основы'}`
+    : getPaletteLabel(product.paletteId);
 
   // На узком экране ряд шагов прокручивается — текущий шаг держим в поле зрения.
   const stepsRef = React.useRef<HTMLOListElement>(null);
@@ -122,7 +131,10 @@ export function Generator(props: GeneratorProps) {
         </div>
 
         {step === 1 ? (
-          <ProductPicker selectedId={product.id} onSelect={props.onSelectPreset} previews={props.previews} />
+          <div className="flex flex-col gap-4">
+            <ProductPicker selectedId={product.id} onSelect={props.onSelectPreset} previews={props.previews} />
+            <BaseColorChoice preset={product} withBase={withBase} onChange={props.onBaseChange} />
+          </div>
         ) : null}
 
         {step === 2 ? (
@@ -180,14 +192,17 @@ export function Generator(props: GeneratorProps) {
         ) : null}
 
         {step === 4 ? (
-          <VariantCardList
-            presets={lineup}
-            variants={variants}
-            aspect={aspect}
-            bestId={props.bestVariantId}
-            selectedId={variantId}
-            onSelect={props.onSelectVariant}
-          />
+          <div className="flex flex-col gap-4">
+            <BaseColorChoice compact preset={product} withBase={withBase} onChange={props.onBaseChange} />
+            <VariantCardList
+              presets={lineup}
+              variants={variants}
+              aspect={aspect}
+              bestId={props.bestVariantId}
+              selectedId={variantId}
+              onSelect={props.onSelectVariant}
+            />
+          </div>
         ) : null}
 
         {step === 5 ? (
@@ -198,14 +213,14 @@ export function Generator(props: GeneratorProps) {
                 result={variant.mosaic}
                 original={props.cropped}
                 palette={palette}
-                paletteLabel={getPaletteLabel(product.paletteId)}
+                paletteLabel={paletteLabel}
                 modeLabel={variant.name}
                 photoName={props.image?.name}
                 qualityScore={variant.qualityScore.total}
                 summary={
                   <>
                     <b className="text-ink">{card.name}</b> · {card.size} · {variant.name} ·{' '}
-                    {formatNumber(card.cells)} деталей
+                    {card.colorsLabel} · {formatNumber(card.cells)} деталей
                   </>
                 }
               />

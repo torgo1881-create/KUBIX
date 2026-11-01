@@ -5,7 +5,13 @@ import * as React from 'react';
 import { generateVariant, type Variant } from '@/algorithms/variants/variantGenerator';
 import { buildPresetPalette } from '@/config/paletteData';
 import { getProcessingProfile } from '@/config/processingProfiles';
-import { getPreset, presetAspect, PRODUCT_PRESETS, type ProductPreset } from '@/config/productPresets';
+import {
+  getPreset,
+  presetAspect,
+  PRODUCT_PRESETS,
+  resolveBaseColor,
+  type ProductPreset,
+} from '@/config/productPresets';
 import {
   SHOP_DEFAULT_FOCUS,
   SHOP_DEFAULT_PRESET_ID,
@@ -55,6 +61,15 @@ const PREVIEW_ORDER = [
   ...PRODUCT_PRESETS.map((preset) => preset.id).filter((id) => id !== SHOP_DEFAULT_PRESET_ID),
 ];
 
+/**
+ * Id расчёта превью. Схема без основы — отдельный расчёт, поэтому выбор
+ * попадает в id: наборы, которых он не касается, остаются в кэше и не мигают
+ * при переключении.
+ */
+function previewJobId(preset: ProductPreset, baseChoice: boolean): string {
+  return resolveBaseColor(preset, baseChoice) === preset.baseColorEnabled ? preset.id : `${preset.id}:no-base`;
+}
+
 function toShopPhoto(image: SourceImage, version: number): ShopPhoto {
   return {
     image,
@@ -69,13 +84,14 @@ function buildVariant(
   product: ProductPreset,
   source: HTMLCanvasElement,
   targetOutputSize: number,
+  withBase: boolean,
 ): Promise<Variant> {
   const profile = getProcessingProfile(product.processingProfile);
   return generateVariant(variant, {
     source,
     cols: product.width,
     rows: product.height,
-    palette: buildPresetPalette(product),
+    palette: buildPresetPalette(product, withBase),
     modeId: profile.modeId,
     distanceMetric: profile.distanceMetric,
     category: product.category,
@@ -94,6 +110,9 @@ export function KubixShop() {
   const [screen, setScreen] = React.useState<'landing' | 'app'>('landing');
   const [step, setStep] = React.useState(1);
   const [presetId, setPresetId] = React.useState(SHOP_DEFAULT_PRESET_ID);
+  // Выбор «с основой / без основы» живёт отдельно от набора: при переходе на
+  // Classic он просто ни на что не влияет, а при возврате на Color сохраняется.
+  const [baseChoice, setBaseChoice] = React.useState(true);
   const [photo, setPhoto] = React.useState<ShopPhoto | null>(null);
   const [savedCrop, setSavedCrop] = React.useState<SavedCrop | null>(null);
   const [chosenVariantId, setChosenVariantId] = React.useState<string | null>(null);
@@ -138,6 +157,7 @@ export function KubixShop() {
   /* --- набор, кадр, лента вариантов ---------------------------------------- */
 
   const product = getPreset(presetId);
+  const withBase = resolveBaseColor(product, baseChoice);
   const aspect = presetAspect(product);
   const lineup = React.useMemo(() => shopVariantPresets(product.category), [product.category]);
   const variantId = lineup.some((item) => item.id === chosenVariantId) ? (chosenVariantId as string) : lineup[0].id;
@@ -183,11 +203,17 @@ export function KubixShop() {
 
   /* --- превью наборов: hero, каталог, шаг 1 -------------------------------- */
 
+  const previewIds = React.useMemo(
+    () => PREVIEW_ORDER.map((id) => previewJobId(getPreset(id), baseChoice)),
+    [baseChoice],
+  );
+
   const previews = useKeyedJobs<MosaicGrid>(
     photo ? `photo:${photo.version}` : null,
-    PREVIEW_ORDER,
+    previewIds,
     async (id) => {
-      const preset = getPreset(id);
+      const [jobPresetId, suffix] = id.split(':');
+      const preset = getPreset(jobPresetId);
       const image = (photo as ShopPhoto).image;
       const rect = coverCropRect(
         image.width,
@@ -197,11 +223,27 @@ export function KubixShop() {
         SHOP_DEFAULT_FOCUS.y,
       );
       const source = cropToCanvas(image.element, rect, PREVIEW_SOURCE_SIZE);
-      const variant = await buildVariant(shopVariantPresets(preset.category)[0], preset, source, PREVIEW_OUTPUT_SIZE);
+      const variant = await buildVariant(
+        shopVariantPresets(preset.category)[0],
+        preset,
+        source,
+        PREVIEW_OUTPUT_SIZE,
+        resolveBaseColor(preset, suffix !== 'no-base'),
+      );
       return variant.mosaic.grid;
     },
     showToast,
   );
+
+  /** Превью по id набора: витрина и шаг 1 про id расчётов ничего не знают. */
+  const presetPreviews = React.useMemo(() => {
+    const map = new Map<string, MosaicGrid>();
+    for (const preset of PRODUCT_PRESETS) {
+      const grid = previews.results.get(previewJobId(preset, baseChoice));
+      if (grid) map.set(preset.id, grid);
+    }
+    return map;
+  }, [baseChoice, previews.results]);
 
   const heroPreset = getPreset(SHOP_DEFAULT_PRESET_ID);
   const heroPhoto = React.useMemo(() => {
@@ -221,7 +263,12 @@ export function KubixShop() {
 
   const needVariants = screen === 'app' && step >= 3 && photo !== null && crop !== null;
   const variantKey = needVariants
-    ? [photo.version, product.id, ...[crop.x, crop.y, crop.width, crop.height].map((value) => value.toFixed(1))].join('|')
+    ? [
+        photo.version,
+        product.id,
+        withBase ? 'base' : 'no-base',
+        ...[crop.x, crop.y, crop.width, crop.height].map((value) => value.toFixed(1)),
+      ].join('|')
     : null;
   // На шаге «Вариант» нужна вся лента, на остальных — только выбранный.
   const wantedVariants =
@@ -236,6 +283,7 @@ export function KubixShop() {
         product,
         cropped as HTMLCanvasElement,
         VARIANT_OUTPUT_SIZE,
+        withBase,
       ),
     showToast,
   );
@@ -344,8 +392,8 @@ export function KubixShop() {
 
       {screen === 'landing' ? (
         <Landing
-          previews={previews.results}
-          heroGrid={previews.results.get(SHOP_DEFAULT_PRESET_ID)}
+          previews={presetPreviews}
+          heroGrid={presetPreviews.get(SHOP_DEFAULT_PRESET_ID)}
           heroPhoto={heroPhoto}
           heroPresetName={heroPreset.name}
           photoName={photo?.image.name ?? ''}
@@ -362,8 +410,10 @@ export function KubixShop() {
           step={step}
           onStep={goStep}
           product={product}
-          previews={previews.results}
+          previews={presetPreviews}
           onSelectPreset={(preset) => setPresetId(preset.id)}
+          withBase={withBase}
+          onBaseChange={setBaseChoice}
           image={photo?.image ?? null}
           thumbnail={photo?.thumbnail ?? null}
           uploading={uploading}

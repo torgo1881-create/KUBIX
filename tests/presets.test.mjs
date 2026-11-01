@@ -26,6 +26,7 @@ import { parsePalettes } from '../src/config/palettes.ts';
 import { getProcessingProfile, getProfileMode, PROCESSING_PROFILES } from '../src/config/processingProfiles.ts';
 import {
   BASE_COLOR_ID,
+  baseColorIsOptional,
   DEFAULT_PRESET_ID,
   describePreset,
   getPreset,
@@ -34,6 +35,7 @@ import {
   presetsByCategory,
   PRODUCT_PRESETS,
   PRODUCT_PRESET_IDS,
+  resolveBaseColor,
 } from '../src/config/productPresets.ts';
 import { checkPresetCapacity, describeCapacity } from '../src/lib/capacity.ts';
 
@@ -179,6 +181,72 @@ test('палитра набора получает реальный запас �
     // Основа участвует только там, где она есть в наборе.
     const hasBase = palette.colors.some((color) => color.id === BASE_COLOR_ID);
     assert.equal(hasBase, preset.baseColorEnabled, `${preset.id}: чёрная основа`);
+  }
+});
+
+/* ------------------------------------------------- выбор «с основой / без» */
+
+test('выбор основы есть только там, где основа лежит в коробке', () => {
+  for (const preset of PRODUCT_PRESETS) {
+    assert.equal(baseColorIsOptional(preset), preset.baseColorEnabled, `${preset.id}: есть ли выбор`);
+
+    // «Как в наборе» — поведение по умолчанию: старые вызовы ничего не меняют.
+    assert.equal(resolveBaseColor(preset), preset.baseColorEnabled, `${preset.id}: по умолчанию`);
+    assert.equal(resolveBaseColor(preset, undefined), preset.baseColorEnabled, `${preset.id}: undefined`);
+    assert.equal(resolveBaseColor(preset, null), preset.baseColorEnabled, `${preset.id}: null`);
+
+    // Отказаться от основы можно всегда, включить — только если она есть.
+    assert.equal(resolveBaseColor(preset, false), false, `${preset.id}: без основы`);
+    assert.equal(resolveBaseColor(preset, true), preset.baseColorEnabled, `${preset.id}: с основой`);
+  }
+});
+
+test('без основы палитра набора теряет ровно один цвет', () => {
+  for (const preset of PRODUCT_PRESETS) {
+    const withBase = buildPresetPalette(preset, true);
+    const noBase = buildPresetPalette(preset, false);
+
+    assert.equal(
+      noBase.colors.some((color) => color.id === BASE_COLOR_ID),
+      false,
+      `${preset.id}: основы в палитре нет`,
+    );
+
+    if (!preset.baseColorEnabled) {
+      // В Classic основы и так нет — выбор ничего не меняет.
+      assert.deepEqual(noBase, withBase, `${preset.id}: выбор ни на что не влияет`);
+      assert.equal(presetPaletteSize(preset, false), presetPaletteSize(preset, true), `${preset.id}: цветов столько же`);
+      continue;
+    }
+
+    assert.equal(withBase.colors.length - noBase.colors.length, 1, `${preset.id}: ушла одна основа`);
+    assert.equal(presetPaletteSize(preset, false), presetPaletteSize(preset, true) - 1, `${preset.id}: цветов меньше`);
+    assert.notEqual(noBase.id, withBase.id, `${preset.id}: палитры различимы по id`);
+
+    // Остальные цвета — те же, и в том же количестве.
+    assert.deepEqual(
+      noBase.colors.map((color) => color.id),
+      withBase.colors.filter((color) => color.id !== BASE_COLOR_ID).map((color) => color.id),
+      `${preset.id}: остальные цвета не тронуты`,
+    );
+  }
+});
+
+test('отказ от основы не добавляет деталей остальным цветам', () => {
+  // Детали основы лежат в коробке независимо от схемы: если бы запас делился
+  // по числу использованных цветов, набор без основы «разбогател» бы на бумаге.
+  for (const preset of PRODUCT_PRESETS.filter((item) => item.baseColorEnabled)) {
+    const withBase = buildPresetPalette(preset, true);
+    const noBase = buildPresetPalette(preset, false);
+
+    for (const color of noBase.colors) {
+      const same = withBase.colors.find((item) => item.id === color.id);
+      assert.equal(color.availableQuantity, same.availableQuantity, `${preset.id}/${color.id}: запас тот же`);
+    }
+
+    const total = noBase.colors.reduce((sum, color) => sum + color.availableQuantity, 0);
+    assert.ok(total < preset.availablePieces, `${preset.id}: часть деталей остаётся в коробке`);
+    assert.ok(total >= preset.maxCells, `${preset.id}: без основы картина всё равно собирается`);
   }
 });
 
@@ -338,6 +406,42 @@ test('каждый набор проходит через ядро и уклад
   console.log('    ↳ ' + rows.join('\n    ↳ '));
 });
 
+test('набор без основы проходит через ядро и не использует её цвет', () => {
+  const base = getPalette('color').colors.find((color) => color.id === BASE_COLOR_ID);
+
+  for (const preset of PRODUCT_PRESETS.filter((item) => item.baseColorEnabled)) {
+    const palette = buildPresetPalette(preset, false);
+    const profile = getProcessingProfile(preset.processingProfile);
+    const image = makePhoto(preset.width * 8, preset.height * 8);
+
+    const core = computeMosaicCore(image, {
+      cols: preset.width,
+      rows: preset.height,
+      mode: profile.modeId,
+      distanceMetric: profile.distanceMetric,
+      palette,
+      enforcePieceLimits: profile.enforcePieceLimits,
+      sampleWidth: image.width,
+      sampleHeight: image.height,
+    });
+
+    assert.equal(core.grid.cells.length, preset.maxCells, `${preset.id}: ячеек`);
+    assert.equal(core.pieceLimit.satisfied, true, `${preset.id}: запас деталей соблюдён и без основы`);
+
+    const allowed = new Set(palette.colors.map((color) => color.hex));
+    for (const cell of core.grid.cells) {
+      assert.ok(allowed.has(cell.hex), `${preset.id}: цвет ${cell.hex} есть в схеме`);
+      assert.notEqual(cell.hex, base.hex, `${preset.id}: основа не используется`);
+    }
+
+    assert.equal(
+      describeCapacity(preset, core.pieceLimit).level === 'insufficient',
+      false,
+      `${preset.id}: набор подходит и без основы`,
+    );
+  }
+});
+
 test('Color использует цветные детали, Classic — монохромные', () => {
   const image = makePhoto(512, 512);
 
@@ -392,6 +496,19 @@ test('карточка набора содержит только продукт
   const color = describePreset(getPreset('color-s'), presetPaletteSize(getPreset('color-s')));
   assert.equal(color.colors, 6, 'основа не считается цветом набора');
   assert.equal(color.colorsLabel, '6 + чёрная основа');
+  assert.equal(color.withBase, true);
+  assert.equal(classic.withBase, false, 'в Classic основы нет');
+
+  // Тот же набор, собранный без основы: цветов столько же, подпись другая.
+  const colorNoBase = describePreset(getPreset('color-s'), presetPaletteSize(getPreset('color-s'), false), false);
+  assert.equal(colorNoBase.colors, 6);
+  assert.equal(colorNoBase.colorsLabel, '6 без основы');
+  assert.equal(colorNoBase.withBase, false);
+
+  // У Classic выбирать нечего — подпись не меняется.
+  const classicNoBase = describePreset(getPreset('classic-s'), presetPaletteSize(getPreset('classic-s'), false), false);
+  assert.equal(classicNoBase.colorsLabel, '5');
+  assert.equal(classicNoBase.withBase, false);
 
   // В карточке нет ни одного технического параметра алгоритма.
   const serialized = JSON.stringify(classic) + JSON.stringify(color);

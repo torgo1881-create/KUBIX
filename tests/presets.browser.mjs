@@ -6,7 +6,7 @@
  * пропорции кадра, а технические параметры не показываются покупателю.
  */
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
@@ -247,7 +247,58 @@ test('продуктовый сценарий: набор → фото → ка�
     assert.ok(report.colors <= 4, 'использована тестовая палитра из четырёх цветов');
   });
 
-  await t.test('6. без ошибок в консоли', () => {
+  await t.test('6. выбор «с основой / без основы»', async () => {
+    await page.goto(pageUrl);
+    await page.click('button[data-preset="color-s"]');
+    await page.setInputFiles('#file', portrait);
+    await page.waitForSelector('#cropStage:visible');
+
+    // Цвет основы берём из конфигурации — ядро внутри страницы наружу не вынесено.
+    const palettes = JSON.parse(readFileSync(join(root, 'src/config/palettes.json'), 'utf8'));
+    const baseHex = palettes.color.find((color) => color.id === 'color-base').hex.toUpperCase();
+
+    // По умолчанию — как в наборе: основа участвует.
+    assert.equal(await page.isVisible('#baseColor'), true, 'у Color выбор есть');
+    assert.match(await page.textContent('#baseColor'), /С основой/);
+
+    await page.click('#generate');
+    await page.waitForFunction(() => window.__mosaic.result, null, { timeout: 90000 });
+    const withBase = await page.evaluate(() => [
+      ...new Set(window.__mosaic.result.grid.cells.map((cell) => cell.hex)),
+    ]);
+    assert.ok(withBase.includes(baseHex), 'с основой она попадает в схему');
+
+    // Переключение сбрасывает расчёт: палитра другая, старая схема не годится.
+    // Выбор, как и переворот картины, живёт в панели кадра — возвращаемся туда.
+    await page.click('#back');
+    await page.waitForSelector('#cropTools:visible');
+    await page.click('#baseColor');
+    assert.match(await page.textContent('#baseColor'), /Без основы/);
+    assert.equal(await page.evaluate(() => window.__mosaic.result), null, 'схема пересчитывается заново');
+    assert.match(await page.textContent('#productSummary'), /без основы/i, 'сводка знает про выбор');
+
+    await page.click('#generate');
+    await page.waitForFunction(() => window.__mosaic.result, null, { timeout: 90000 });
+    const noBase = await page.evaluate(() => ({
+      hexes: [...new Set(window.__mosaic.result.grid.cells.map((cell) => cell.hex))],
+      satisfied: window.__mosaic.result.pieceLimit.satisfied,
+      level: window.__mosaic.capacity.level,
+    }));
+
+    assert.equal(noBase.hexes.includes(baseHex), false, 'без основы её цвета в схеме нет');
+    assert.ok(noBase.hexes.length <= 6, `без основы остаётся шесть цветов, а не ${noBase.hexes.length}`);
+    assert.equal(noBase.satisfied, true, 'деталей хватает и без основы');
+    assert.notEqual(noBase.level, 'insufficient', 'набор подходит и без основы');
+
+    // У Classic основы в коробке нет — и выбирать нечего.
+    await page.goto(pageUrl);
+    await page.click('button[data-preset="classic-s"]');
+    await page.setInputFiles('#file', portrait);
+    await page.waitForSelector('#cropStage:visible');
+    assert.equal(await page.isVisible('#baseColor'), false, 'у Classic выбора нет');
+  });
+
+  await t.test('7. без ошибок в консоли', () => {
     assert.deepEqual(errors, []);
   });
 

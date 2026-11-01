@@ -1,7 +1,7 @@
 import type { Palette, PaletteColor } from '../types/palette';
 import raw from './palettes.json';
 import { parsePalettes } from './palettes';
-import { BASE_COLOR_ID, type ProductPreset } from './productPresets';
+import { BASE_COLOR_ID, resolveBaseColor, type ProductPreset } from './productPresets';
 
 /**
  * Единственное место, где читается config/palettes.json.
@@ -66,24 +66,35 @@ export function productPalettes(): Palette[] {
  * заглушка — настоящее количество деталей задаёт продуктовый пресет,
  * потому что один и тот же цвет в наборе S и L встречается в разном
  * количестве.
+ *
+ * `withBase` — выбор пользователя: участвует ли чёрная основа в схеме.
+ * `undefined` значит «как в наборе», поэтому старые вызовы ничего не меняют.
+ * Отказ от основы не делает остальные цвета многочисленнее: запас на цвет
+ * считается по составу коробки, а детали основы просто остаются лежать.
  */
-export function buildPresetPalette(preset: ProductPreset): Palette {
+export function buildPresetPalette(preset: ProductPreset, withBase?: boolean | null): Palette {
   const source = getPalette(preset.paletteId);
-  const usable = preset.baseColorEnabled
+  const inBox = preset.baseColorEnabled
     ? source.colors
     : source.colors.filter((color) => color.id !== BASE_COLOR_ID);
 
-  const perColor = Math.ceil(preset.availablePieces / usable.length);
+  const perColor = Math.ceil(preset.availablePieces / inBox.length);
+
+  const base = resolveBaseColor(preset, withBase);
+  const usable = base ? inBox : inBox.filter((color) => color.id !== BASE_COLOR_ID);
 
   const colors: PaletteColor[] = usable.map((color) => ({
     ...color,
     availableQuantity: perColor,
   }));
 
-  return { id: `${source.id}-${preset.id}`, colors };
+  // Id различает две палитры одного набора — иначе схема без основы была бы
+  // неотличима от схемы с основой в кэшах и подписях.
+  const suffix = preset.baseColorEnabled && !base ? '-no-base' : '';
+  return { id: `${source.id}-${preset.id}${suffix}`, colors };
 }
 
 /** Сколько цветов реально участвует в наборе. */
-export function presetPaletteSize(preset: ProductPreset): number {
-  return buildPresetPalette(preset).colors.length;
+export function presetPaletteSize(preset: ProductPreset, withBase?: boolean | null): number {
+  return buildPresetPalette(preset, withBase).colors.length;
 }

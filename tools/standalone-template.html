@@ -330,6 +330,7 @@
           <button id="fit" type="button">Вписать</button>
           <button id="rotate" type="button" title="Повернуть фотографию на 90°">↻ Повернуть фото</button>
           <button id="orientation" type="button" title="Собирать картину горизонтально или вертикально" hidden>▭ Горизонтально</button>
+          <button id="baseColor" type="button" title="Использовать чёрную основу — дополнительный тёмный цвет набора" hidden>◼ С основой</button>
         </div>
 
         <div id="productSummary" class="summary"></div>
@@ -537,6 +538,9 @@
         // Ориентация картины: набор задан вертикальным (64×96), но тот же
         // набор собирается и горизонтально (96×64) — деталей столько же.
         orientation: 'portrait',
+        // Участвует ли чёрная основа в схеме. У наборов, где её нет в
+        // коробке, выбор ни на что не влияет.
+        baseColor: true,
       };
 
       /* --- этапы --- */
@@ -603,9 +607,10 @@
           preset,
           source: 'preset',
           landscape,
+          withBase: resolveBaseColor(preset, state.baseColor),
           cols: landscape ? preset.height : preset.width,
           rows: landscape ? preset.width : preset.height,
-          palette: buildPresetPalette(preset),
+          palette: buildPresetPalette(preset, state.baseColor),
           modeId: profile.modeId,
           metric: profile.distanceMetric,
           enforceLimits: profile.enforcePieceLimits,
@@ -642,7 +647,8 @@
 
       function renderProductSummary() {
         const config = activeConfig();
-        const card = describePreset(config.preset, presetPaletteSize(config.preset));
+        const withBase = config.source === 'manual' ? config.preset.baseColorEnabled : config.withBase;
+        const card = describePreset(config.preset, presetPaletteSize(config.preset, withBase), withBase);
         const labels = orientedLabels(config, card);
         const rows = [
           ['Набор', card.name],
@@ -658,6 +664,12 @@
         $('orientation').hidden = !canFlip;
         $('orientation').textContent = config.landscape ? '▯ Вертикально' : '▭ Горизонтально';
         $('orientation').setAttribute('aria-pressed', String(Boolean(config.landscape)));
+
+        // Выбор «с основой / без основы» есть только там, где основа в коробке.
+        const canDropBase = config.source !== 'manual' && baseColorIsOptional(config.preset);
+        $('baseColor').hidden = !canDropBase;
+        $('baseColor').textContent = withBase ? '◼ С основой' : '◻ Без основы';
+        $('baseColor').setAttribute('aria-pressed', String(Boolean(withBase)));
 
         $('productSummary').innerHTML = rows
           .map(([k, v]) => `<div><span class="k">${k}</span><span class="v">${v}</span></div>`)
@@ -1157,6 +1169,14 @@
         setStep('crop');
         setStage('processing', 0.5);
       }
+
+      // Схема без чёрной основы: шесть цветов вместо семи, детали основы
+      // остаются в коробке. Расчёт нужно повторить — палитра другая.
+      $('baseColor').addEventListener('click', () => {
+        state.baseColor = !state.baseColor;
+        backToCrop();
+        renderProductSummary();
+      });
 
       // Та же картина горизонтально: сетка 64×96 становится 96×64, деталей столько же.
       $('orientation').addEventListener('click', () => {

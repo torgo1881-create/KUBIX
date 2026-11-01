@@ -27,7 +27,13 @@ export interface ProductPreset {
   maxCells: number;
   /** Сколько деталей физически лежит в коробке. */
   availablePieces: number;
-  /** Есть ли в наборе чёрная основа как дополнительный тёмный цвет. */
+  /**
+   * Лежит ли в коробке чёрная основа — дополнительный тёмный цвет.
+   *
+   * Это состав набора, а не настройка генерации: основа либо есть в коробке,
+   * либо нет. Пользоваться ею в схеме или обойтись без неё — отдельный
+   * выбор, см. resolveBaseColor.
+   */
   baseColorEnabled: boolean;
   processingProfile: ProcessingProfileId;
 }
@@ -40,6 +46,22 @@ export const PIECE_GENEROSITY = 1.55;
 
 /** Id цвета, который считается чёрной основой. */
 export const BASE_COLOR_ID = 'color-base';
+
+/**
+ * Участвует ли основа в генерации.
+ *
+ * Выбор есть только там, где основа физически лежит в коробке: в наборах
+ * Classic её нет, и «с основой» для них ничего не значит. `undefined` и
+ * `null` означают «как в наборе» — так ведут себя все старые вызовы.
+ */
+export function resolveBaseColor(preset: ProductPreset, withBase?: boolean | null): boolean {
+  return preset.baseColorEnabled && (withBase ?? true);
+}
+
+/** Можно ли для этого набора выбирать «с основой / без основы». */
+export function baseColorIsOptional(preset: ProductPreset): boolean {
+  return preset.baseColorEnabled;
+}
 
 function pieces(cells: number): number {
   return Math.round((cells * PIECE_GENEROSITY) / 100) * 100;
@@ -159,12 +181,21 @@ export interface ProductSummary {
   cells: number;
   colors: number;
   colorsLabel: string;
+  /** Участвует ли чёрная основа в этой схеме. */
+  withBase: boolean;
   pieces: number;
   aspect: string;
 }
 
-export function describePreset(preset: ProductPreset, paletteColors: number): ProductSummary {
-  const visibleColors = preset.baseColorEnabled ? paletteColors - 1 : paletteColors;
+export function describePreset(
+  preset: ProductPreset,
+  paletteColors: number,
+  withBase: boolean = preset.baseColorEnabled,
+): ProductSummary {
+  // paletteColors — сколько цветов реально в работе. Основа среди них не
+  // «цвет набора», поэтому в подписи она идёт отдельной строкой.
+  const base = resolveBaseColor(preset, withBase);
+  const visibleColors = base ? paletteColors - 1 : paletteColors;
   return {
     id: preset.id,
     name: preset.name,
@@ -173,7 +204,12 @@ export function describePreset(preset: ProductPreset, paletteColors: number): Pr
     grid: `${preset.width}×${preset.height}`,
     cells: preset.maxCells,
     colors: visibleColors,
-    colorsLabel: preset.baseColorEnabled ? `${visibleColors} + чёрная основа` : String(visibleColors),
+    colorsLabel: base
+      ? `${visibleColors} + чёрная основа`
+      : preset.baseColorEnabled
+        ? `${visibleColors} без основы`
+        : String(visibleColors),
+    withBase: base,
     pieces: preset.availablePieces,
     aspect: presetAspectLabel(preset),
   };
